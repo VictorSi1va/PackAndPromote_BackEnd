@@ -1,0 +1,60 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\GITHUB_VICTOR\\PackAndPromote_BackEnd\\PackAndPromote\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{98D10184-89D2-450E-84C1-CCAF0A71443F}|..\\PackAndPromote.Tests\\PackAndPromote.Tests.csproj|c:\\github_victor\\packandpromote_backend\\packandpromote.tests\\logintests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{98D10184-89D2-450E-84C1-CCAF0A71443F}|..\\PackAndPromote.Tests\\PackAndPromote.Tests.csproj|c:\\github_victor\\packandpromote_backend\\packandpromote.tests\\vendastests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{e1b7d1f8-9b3c-49b1-8f4f-bfc63a88835d}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "LoginTests.cs",
+              "DocumentMoniker": "C:\\GITHUB_VICTOR\\PackAndPromote_BackEnd\\PackAndPromote.Tests\\LoginTests.cs",
+              "RelativeDocumentMoniker": "..\\PackAndPromote.Tests\\LoginTests.cs",
+              "ToolTip": "C:\\GITHUB_VICTOR\\PackAndPromote_BackEnd\\PackAndPromote.Tests\\LoginTests.cs",
+              "RelativeToolTip": "..\\PackAndPromote.Tests\\LoginTests.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-08T00:59:56.351Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "VendasTests.cs",
+              "DocumentMoniker": "C:\\GITHUB_VICTOR\\PackAndPromote_BackEnd\\PackAndPromote.Tests\\VendasTests.cs",
+              "RelativeDocumentMoniker": "..\\PackAndPromote.Tests\\VendasTests.cs",
+              "ToolTip": "C:\\GITHUB_VICTOR\\PackAndPromote_BackEnd\\PackAndPromote.Tests\\VendasTests.cs",
+              "RelativeToolTip": "..\\PackAndPromote.Tests\\VendasTests.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-08T00:59:55.295Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
