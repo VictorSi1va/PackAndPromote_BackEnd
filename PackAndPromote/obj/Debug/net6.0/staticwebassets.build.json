@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "1e9wps0PhxZZRojYTGmeRQUdScP+mseWlHuM8t1iOOE=",
+  "Source": "PackAndPromote",
+  "BasePath": "_content/PackAndPromote",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
