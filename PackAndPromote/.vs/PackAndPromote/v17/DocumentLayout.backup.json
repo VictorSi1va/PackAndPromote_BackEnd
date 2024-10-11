@@ -3,10 +3,16 @@
   "WorkspaceRootPath": "C:\\GITHUB_VICTOR\\PackAndPromote_BackEnd\\PackAndPromote\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{98D10184-89D2-450E-84C1-CCAF0A71443F}|..\\PackAndPromote.Tests\\PackAndPromote.Tests.csproj|c:\\github_victor\\packandpromote_backend\\packandpromote.tests\\logintests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{003BC8AC-3A2A-462B-ADF8-CD8111DD70E8}|PackAndPromote.csproj|c:\\github_victor\\packandpromote_backend\\packandpromote\\controllers\\logincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{003BC8AC-3A2A-462B-ADF8-CD8111DD70E8}|PackAndPromote.csproj|solutionrelative:controllers\\logincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{98D10184-89D2-450E-84C1-CCAF0A71443F}|..\\PackAndPromote.Tests\\PackAndPromote.Tests.csproj|c:\\github_victor\\packandpromote_backend\\packandpromote.tests\\vendastests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{003BC8AC-3A2A-462B-ADF8-CD8111DD70E8}|PackAndPromote.csproj|c:\\github_victor\\packandpromote_backend\\packandpromote\\controllers\\vendascontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{003BC8AC-3A2A-462B-ADF8-CD8111DD70E8}|PackAndPromote.csproj|solutionrelative:controllers\\vendascontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{003BC8AC-3A2A-462B-ADF8-CD8111DD70E8}|PackAndPromote.csproj|c:\\github_victor\\packandpromote_backend\\packandpromote\\controllers\\regiaoalvocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{003BC8AC-3A2A-462B-ADF8-CD8111DD70E8}|PackAndPromote.csproj|solutionrelative:controllers\\regiaoalvocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -16,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Bookmark",
@@ -28,28 +34,41 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "LoginTests.cs",
-              "DocumentMoniker": "C:\\GITHUB_VICTOR\\PackAndPromote_BackEnd\\PackAndPromote.Tests\\LoginTests.cs",
-              "RelativeDocumentMoniker": "..\\PackAndPromote.Tests\\LoginTests.cs",
-              "ToolTip": "C:\\GITHUB_VICTOR\\PackAndPromote_BackEnd\\PackAndPromote.Tests\\LoginTests.cs",
-              "RelativeToolTip": "..\\PackAndPromote.Tests\\LoginTests.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "VendasController.cs",
+              "DocumentMoniker": "C:\\GITHUB_VICTOR\\PackAndPromote_BackEnd\\PackAndPromote\\Controllers\\VendasController.cs",
+              "RelativeDocumentMoniker": "Controllers\\VendasController.cs",
+              "ToolTip": "C:\\GITHUB_VICTOR\\PackAndPromote_BackEnd\\PackAndPromote\\Controllers\\VendasController.cs",
+              "RelativeToolTip": "Controllers\\VendasController.cs",
+              "ViewState": "AgIAAGcAAAAAAAAAAAAAAIMAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-08T00:59:56.351Z",
+              "WhenOpened": "2024-10-10T23:36:26.877Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "VendasTests.cs",
-              "DocumentMoniker": "C:\\GITHUB_VICTOR\\PackAndPromote_BackEnd\\PackAndPromote.Tests\\VendasTests.cs",
-              "RelativeDocumentMoniker": "..\\PackAndPromote.Tests\\VendasTests.cs",
-              "ToolTip": "C:\\GITHUB_VICTOR\\PackAndPromote_BackEnd\\PackAndPromote.Tests\\VendasTests.cs",
-              "RelativeToolTip": "..\\PackAndPromote.Tests\\VendasTests.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "RegiaoAlvoController.cs",
+              "DocumentMoniker": "C:\\GITHUB_VICTOR\\PackAndPromote_BackEnd\\PackAndPromote\\Controllers\\RegiaoAlvoController.cs",
+              "RelativeDocumentMoniker": "Controllers\\RegiaoAlvoController.cs",
+              "ToolTip": "C:\\GITHUB_VICTOR\\PackAndPromote_BackEnd\\PackAndPromote\\Controllers\\RegiaoAlvoController.cs",
+              "RelativeToolTip": "Controllers\\RegiaoAlvoController.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAAAAAEMAAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-08T00:59:55.295Z",
+              "WhenOpened": "2024-10-10T23:35:22.462Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "LoginController.cs",
+              "DocumentMoniker": "C:\\GITHUB_VICTOR\\PackAndPromote_BackEnd\\PackAndPromote\\Controllers\\LoginController.cs",
+              "RelativeDocumentMoniker": "Controllers\\LoginController.cs",
+              "ToolTip": "C:\\GITHUB_VICTOR\\PackAndPromote_BackEnd\\PackAndPromote\\Controllers\\LoginController.cs",
+              "RelativeToolTip": "Controllers\\LoginController.cs",
+              "ViewState": "AgIAAFUAAAAAAAAAAAAAAGQAAABIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-10T23:32:02.63Z",
               "EditorCaption": ""
             }
           ]

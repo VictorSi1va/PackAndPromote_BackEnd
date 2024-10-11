@@ -11,7 +11,7 @@ namespace PackAndPromote.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int IdRegiaoAlvo { get; set; }
 
-        [Column("DescricaoRegiaoAlvo")]
-        public string DescricaoRegiaoAlvo { get; set; }
+        [Column("NomeRegiaoAlvo")]
+        public string NomeRegiaoAlvo { get; set; }
     }
 }
