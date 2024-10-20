@@ -38,6 +38,9 @@ namespace PackAndPromote.Controllers
         [HttpPost("CriarRegiaoAlvo")]
         public ActionResult<RegiaoAlvo> CriarRegiaoAlvo(RegiaoAlvoDto regiaoAlvoDto)
         {
+            if (string.IsNullOrWhiteSpace(regiaoAlvoDto.NomeRegiaoAlvo))
+                return BadRequest("O nome da Região Alvo não pode ser vazio ou nulo.");
+
             RegiaoAlvo regiaoAlvo = new RegiaoAlvo
             {
                 NomeRegiaoAlvo = regiaoAlvoDto.NomeRegiaoAlvo

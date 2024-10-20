@@ -38,6 +38,9 @@ namespace PackAndPromote.Controllers
         [HttpPost("CriarPreferenciaAlvo")]
         public ActionResult<PreferenciaAlvo> CriarPreferenciaAlvo(PreferenciaAlvoDto preferenciaAlvoDto)
         {
+            if (string.IsNullOrWhiteSpace(preferenciaAlvoDto.DescricaoPreferenciaAlvo))
+                return BadRequest("A descrição da Preferencia Alvo não pode ser vazia ou nula.");
+
             PreferenciaAlvo preferenciaAlvo = new PreferenciaAlvo
             {
                 DescricaoPreferenciaAlvo = preferenciaAlvoDto.DescricaoPreferenciaAlvo
