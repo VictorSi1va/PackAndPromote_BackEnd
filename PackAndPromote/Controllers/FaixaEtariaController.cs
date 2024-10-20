@@ -38,6 +38,9 @@ namespace PackAndPromote.Controllers
         [HttpPost("CriarFaixaEtaria")]
         public ActionResult<FaixaEtaria> CriarFaixaEtaria(FaixaEtariaDto faixaEtariaDto)
         {
+            if (string.IsNullOrWhiteSpace(faixaEtariaDto.DescricaoFaixaEtaria))
+                return BadRequest("A descrição da faixa etária não pode ser vazia ou nula.");
+
             FaixaEtaria faixaEtaria = new FaixaEtaria
             {
                 DescricaoFaixaEtaria = faixaEtariaDto.DescricaoFaixaEtaria

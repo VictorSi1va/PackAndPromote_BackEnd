@@ -38,6 +38,9 @@ namespace PackAndPromote.Controllers
         [HttpPost("CriarPublicoAlvo")]
         public ActionResult<PublicoAlvo> CriarPublicoAlvo(PublicoAlvoDto publicoAlvoDto)
         {
+            if (string.IsNullOrWhiteSpace(publicoAlvoDto.DescricaoPublicoAlvo))
+                return BadRequest("A descrição do Público Alvo não pode ser vazia ou nula.");
+
             PublicoAlvo publicoAlvo = new PublicoAlvo
             {
                 DescricaoPublicoAlvo = publicoAlvoDto.DescricaoPublicoAlvo

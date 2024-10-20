@@ -1,9 +1,7 @@
 ﻿namespace PackAndPromote.Dtos
 {
-    public class LojaDto
+    public class LojaAlteradaDto
     {
-        public int IdLoja { get; set; }
-
         public string NomeLoja { get; set; }
 
         public string EnderecoLoja { get; set; }
@@ -15,7 +13,5 @@
         public string CNPJLoja { get; set; }
 
         public string EmailLoja { get; set; }
-
-        public DateTime DataCriacao { get; set; }
     }
 }

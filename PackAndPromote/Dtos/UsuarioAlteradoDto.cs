@@ -1,10 +1,7 @@
 ﻿namespace PackAndPromote.Dtos
 {
-    public class UsuarioDto
+    public class UsuarioAlteradoDto
     {
-        public string Login { get; set; }
-        public string Senha { get; set; }
-
         public string NomeLoja { get; set; }
         public string EnderecoLoja { get; set; }
         public string DescricaoLoja { get; set; }

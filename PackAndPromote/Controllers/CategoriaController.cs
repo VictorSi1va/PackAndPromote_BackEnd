@@ -38,6 +38,9 @@ namespace PackAndPromote.Controllers
         [HttpPost("CriarCategoria")]
         public ActionResult<Categoria> CriarCategoria(CategoriaDto categoriaDto)
         {
+            if (string.IsNullOrWhiteSpace(categoriaDto.NomeCategoria))
+                return BadRequest("O Nome da Categoria não pode ser vazio ou nulo.");
+
             Categoria categoria = new Categoria
             {
                 NomeCategoria = categoriaDto.NomeCategoria
