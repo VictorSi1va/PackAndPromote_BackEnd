@@ -22,10 +22,15 @@ jobs:
           dotnet-version: '6.0.x'
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        run: dotnet build "${GITHUB_WORKSPACE}/PackAndPromote/PackAndPromote.csproj/" --configuration Release
+
+      - name: dotnet tests
+        run: dotnet build "${GITHUB_WORKSPACE}/PackAndPromote.Tests/PackAndPromote.Tests.csproj/"
+        env:
+          ConnectionStrings__DefaultConnection: ${{ secrets.DEFAULTCONNECTION }}
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish "${GITHUB_WORKSPACE}/PackAndPromote/PackAndPromote.csproj/" -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
