@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c => { c.SwaggerDoc("v1.0", new OpenApiInfo { Title = "Pack and Promote WebAPI", Version = "v1.0" }); });
+builder.Services.AddSwaggerGen(c => { c.SwaggerDoc("v1.0", new OpenApiInfo { Title = "Pack and Promote WebAPI DEV", Version = "v1.0" }); });
 
 builder.Services.AddDbContext<DbPackAndPromote>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("PackAndPromote")));
 
