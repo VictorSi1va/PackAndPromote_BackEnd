@@ -12,7 +12,7 @@ builder.Services.AddSwaggerGen(c => { c.SwaggerDoc("v1.0", new OpenApiInfo { Tit
 
 builder.Services.AddDbContext<DbPackAndPromote>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("PackAndPromote")));
 
-// Configuração do CORS
+// ConfiguraÃ§Ã£o do CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -26,14 +26,8 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1.0/swagger.json", "API V1.0"));
-}
-
-// Desabilitando o Redirect HTTPS
-// app.UseHttpsRedirection();
+app.UseSwagger();
+app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1.0/swagger.json", "API V1.0"));
 
 app.UseAuthorization();
 
