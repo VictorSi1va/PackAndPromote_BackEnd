@@ -61,4 +61,4 @@ jobs:
           app-name: 'pack-and-promote-dev'
           slot-name: 'Production'
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_0D984D5BC37E43AA9DFEA450090C2E04 }}
+          publish-profile: ${{ secrets.pack_and_promote_dev_8F28 }}
