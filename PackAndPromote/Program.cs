@@ -8,7 +8,13 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Configurações do JWT
-var jwtSecretKey = builder.Configuration["Jwt:SecretKey"]; // Chave JWT
+var jwtSecretKey = builder.Configuration["Jwt:SecretKey"];
+
+if (string.IsNullOrEmpty(jwtSecretKey))
+{
+    throw new InvalidOperationException("A chave secreta JWT não está definida.");
+}
+
 var key = Encoding.ASCII.GetBytes(jwtSecretKey);
 
 builder.Services.AddAuthentication(options =>

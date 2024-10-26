@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using PackAndPromote.Controllers;
 using PackAndPromote.Database;
 using PackAndPromote.Dtos;
@@ -11,16 +12,26 @@ namespace PackAndPromote.Tests
     {
         private readonly DbPackAndPromote _context;
         private readonly LoginController _controller;
+        private readonly IConfiguration _configuration;
 
         public LoginTests()
         {
+            // Configuração de teste
+            var configurationBuilder = new ConfigurationBuilder()
+                .AddInMemoryCollection(new Dictionary<string, string>
+                {
+                { "Jwt:SecretKey", "S3CR3T-K3Y-P4CK-4ND-PR0M0T3-JWT-S3CUR1TY" },
+                });
+
+            _configuration = configurationBuilder.Build();
+
             // Usa o Banco de Dados em Memória para os testes
             var options = new DbContextOptionsBuilder<DbPackAndPromote>()
                     .UseInMemoryDatabase(databaseName: "DatabaseTest")
                     .Options;
 
             _context = new DbPackAndPromote(options);
-            _controller = new LoginController(_context);
+            _controller = new LoginController(_configuration, _context);
         }
 
         [Fact]
