@@ -285,6 +285,11 @@ namespace PackAndPromote.Controllers
             var loja = _dbPackAndPromote.Loja.Find(usuario.IdLoja);
             var usuarioPerfil = _dbPackAndPromote.UsuarioPerfil.Find(usuario.IdUsuario);
 
+            if (loja == null || usuarioPerfil == null)
+            {
+                return NotFound();
+            }
+
             _dbPackAndPromote.Loja.Remove(loja);
             _dbPackAndPromote.UsuarioPerfil.Remove(usuarioPerfil);
             _dbPackAndPromote.Usuario.Remove(usuario);

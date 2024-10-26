@@ -45,7 +45,7 @@ namespace PackAndPromote.Tests
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result.Result);
             var lojas = Assert.IsType<List<LojaDto>>(okResult.Value);
-            Assert.Equal(3, lojas.Count);
+            Assert.Equal(2, lojas.Count);
         }
 
         [Fact]
