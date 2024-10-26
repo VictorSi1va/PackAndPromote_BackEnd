@@ -1,10 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using PackAndPromote.Database;
 using PackAndPromote.Dtos;
 using PackAndPromote.Entities;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 
 namespace PackAndPromote.Controllers
 {
@@ -13,18 +18,22 @@ namespace PackAndPromote.Controllers
     public class LoginController : ControllerBase
     {
         private readonly DbPackAndPromote _dbPackAndPromote;
+        private readonly IConfiguration _configuration;
 
-        public LoginController(DbPackAndPromote context)
+        public LoginController(IConfiguration configuration, DbPackAndPromote context)
         {
+            _configuration = configuration;
             _dbPackAndPromote = context;
         }
 
+        [Authorize]
         [HttpGet("ListarPerfis")]
         public ActionResult<IEnumerable<Perfil>> ListarPerfis()
         {
             return _dbPackAndPromote.Perfil.ToList();
         }
 
+        [Authorize]
         [HttpGet("PesquisarPerfil/{id}")]
         public ActionResult<Perfil> PesquisarPerfil(int id)
         {
@@ -38,6 +47,7 @@ namespace PackAndPromote.Controllers
             return perfil;
         }
 
+        [Authorize]
         [HttpPost("CriarPerfil")]
         public ActionResult<Perfil> CriarPerfil(PerfilDto perfilDto)
         {
@@ -59,6 +69,7 @@ namespace PackAndPromote.Controllers
             return CreatedAtAction(nameof(PesquisarPerfil), new { id = perfil.IdPerfil }, perfil);
         }
 
+        [Authorize]
         [HttpPut("AlterarPerfil/{id}")]
         public IActionResult AlterarPerfil(int id, PerfilDto perfilDto)
         {
@@ -77,6 +88,7 @@ namespace PackAndPromote.Controllers
             return Ok(perfil);
         }
 
+        [Authorize]
         [HttpDelete("ExcluirPerfil/{id}")]
         public IActionResult ExcluirPerfil(int id)
         {
@@ -93,6 +105,7 @@ namespace PackAndPromote.Controllers
             return Ok("Perfil excluído com sucesso!");
         }
 
+        [Authorize]
         [HttpGet("ListarUsuarios")]
         public ActionResult<IEnumerable<UsuarioSimplesDto>> ListarUsuarios()
         {
@@ -108,6 +121,7 @@ namespace PackAndPromote.Controllers
             return usuarios;
         }
 
+        [Authorize]
         [HttpGet("PesquisarUsuario/{id}")]
         public ActionResult<UsuarioSimplesDto> PesquisarUsuario(int id)
         {
@@ -128,6 +142,7 @@ namespace PackAndPromote.Controllers
             return user;
         }
 
+        [Authorize]
         [HttpPost("CriarUsuario")]
         public ActionResult<Usuario> CriarUsuario(UsuarioDto novoUsuarioDto)
         {
@@ -181,10 +196,29 @@ namespace PackAndPromote.Controllers
 
             if (usuario == null)
             {
-                return Unauthorized("Login ou senha inválidos.");
+                return Unauthorized("Login e/ou senha inválidos.");
             }
 
-            return Ok("Login realizado com sucesso.");
+            // Gerar Token JWT
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var jwtSecretKey = _configuration["Jwt:SecretKey"]; // Chave JWT
+            var key = Encoding.ASCII.GetBytes(jwtSecretKey);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, usuario.IdUsuario.ToString()),
+                    new Claim(ClaimTypes.Name, usuario.Login.ToString()),
+                }),
+                Expires = DateTime.UtcNow.AddHours(2), // Token válido por 2 horas
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = tokenHandler.WriteToken(token);
+
+            return Ok(new { Token = tokenString });
         }
 
         [HttpPut("RedefinirSenha/{id}")]
@@ -203,6 +237,7 @@ namespace PackAndPromote.Controllers
             return Ok("Senha alterada com sucesso.");
         }
 
+        [Authorize]
         [HttpPut("AlterarUsuario/{id}")]
         public IActionResult AlterarUsuario(int id, UsuarioAlteradoDto usuarioAlteradoDto)
         {
@@ -236,6 +271,7 @@ namespace PackAndPromote.Controllers
             return Ok("Usuário alterado com sucesso!");
         }
 
+        [Authorize]
         [HttpDelete("ExcluirUsuario/{id}")]
         public IActionResult ExcluirUsuario(int id)
         {

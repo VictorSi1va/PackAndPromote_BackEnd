@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PackAndPromote.Database;
 using PackAndPromote.Dtos;
 using PackAndPromote.Entities;
@@ -35,6 +36,7 @@ namespace PackAndPromote.Controllers
             return Ok(preferenciaAlvo);
         }
 
+        [Authorize]
         [HttpPost("CriarPreferenciaAlvo")]
         public ActionResult<PreferenciaAlvo> CriarPreferenciaAlvo(PreferenciaAlvoDto preferenciaAlvoDto)
         {
@@ -52,6 +54,7 @@ namespace PackAndPromote.Controllers
             return CreatedAtAction(nameof(PesquisarPreferenciaAlvo), new { id = preferenciaAlvo.IdPreferenciaAlvo }, preferenciaAlvo);
         }
 
+        [Authorize]
         [HttpPut("AlterarPreferenciaAlvo/{id}")]
         public IActionResult AlterarPreferenciaAlvo(int id, PreferenciaAlvoDto preferenciaAlvoDto)
         {
@@ -67,6 +70,7 @@ namespace PackAndPromote.Controllers
             return Ok(preferenciaAlvo);
         }
 
+        [Authorize]
         [HttpDelete("ExcluirPreferenciaAlvo/{id}")]
         public IActionResult ExcluirPreferenciaAlvo(int id)
         {

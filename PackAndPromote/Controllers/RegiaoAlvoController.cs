@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PackAndPromote.Database;
 using PackAndPromote.Dtos;
 using PackAndPromote.Entities;
@@ -35,6 +36,7 @@ namespace PackAndPromote.Controllers
             return Ok(regiaoAlvo);
         }
 
+        [Authorize]
         [HttpPost("CriarRegiaoAlvo")]
         public ActionResult<RegiaoAlvo> CriarRegiaoAlvo(RegiaoAlvoDto regiaoAlvoDto)
         {
@@ -52,6 +54,7 @@ namespace PackAndPromote.Controllers
             return CreatedAtAction(nameof(PesquisarRegiaoAlvo), new { id = regiaoAlvo.IdRegiaoAlvo }, regiaoAlvo);
         }
 
+        [Authorize]
         [HttpPut("AlterarRegiaoAlvo/{id}")]
         public IActionResult AlterarRegiaoAlvo(int id, RegiaoAlvoDto regiaoAlvoDto)
         {
@@ -67,6 +70,7 @@ namespace PackAndPromote.Controllers
             return Ok(regiaoAlvo);
         }
 
+        [Authorize]
         [HttpDelete("ExcluirRegiaoAlvo/{id}")]
         public IActionResult ExcluirRegiaoAlvo(int id)
         {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PackAndPromote.Database;
 using PackAndPromote.Dtos;
@@ -60,6 +61,7 @@ namespace PackAndPromote.Controllers
             return Ok(lojaPesquisada);
         }
 
+        [Authorize]
         [HttpPut("AlterarLoja/{id}")]
         public IActionResult AlterarLoja(int id, LojaAlteradaDto lojaAlteradaDto)
         {
@@ -80,6 +82,7 @@ namespace PackAndPromote.Controllers
             return Ok("Loja alterada com sucesso!");
         }
 
+        [Authorize]
         [HttpGet("ListarPedidosEmbalagem")]
         public ActionResult<IEnumerable<PedidoEmbalagemDto>> ListarPedidosEmbalagem()
         {
@@ -112,6 +115,7 @@ namespace PackAndPromote.Controllers
             return Ok(pedidos);
         }
 
+        [Authorize]
         [HttpGet("PesquisarPedidoEmbalagem/{id}")]
         public ActionResult<PedidoEmbalagemDto> PesquisarPedidoEmbalagem(int id)
         {
@@ -145,6 +149,7 @@ namespace PackAndPromote.Controllers
             return Ok(pedidoEmbalagem);
         }
 
+        [Authorize]
         [HttpPost("CriarPedidoEmbalagem")]
         public ActionResult<PedidoEmbalagemSimplesDto> CriarPedidoEmbalagem(PedidoEmbalagemSimplesDto pedido)
         {
@@ -183,6 +188,7 @@ namespace PackAndPromote.Controllers
             return CreatedAtAction(nameof(PesquisarPedidoEmbalagem), new { id = pedidoEmbalagem.IdPedidoEmbalagem }, pedidoEmbalagem);
         }
 
+        [Authorize]
         [HttpPut("AlterarPedidoEmbalagem/{id}")]
         public IActionResult AlterarPedidoEmbalagem(int id, PedidoEmbalagemAlteradoDto pedidoAlteradoDto)
         {
@@ -200,6 +206,7 @@ namespace PackAndPromote.Controllers
             return Ok("Pedido alterado com sucesso!");
         }
 
+        [Authorize]
         [HttpDelete("ExcluirPedidoEmbalagem/{id}")]
         public IActionResult ExcluirPedidoEmbalagem(int id)
         {

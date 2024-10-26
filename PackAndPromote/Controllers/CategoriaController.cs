@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PackAndPromote.Database;
 using PackAndPromote.Dtos;
 using PackAndPromote.Entities;
@@ -35,6 +36,7 @@ namespace PackAndPromote.Controllers
             return Ok(categoria);
         }
 
+        [Authorize]
         [HttpPost("CriarCategoria")]
         public ActionResult<Categoria> CriarCategoria(CategoriaDto categoriaDto)
         {
@@ -52,6 +54,7 @@ namespace PackAndPromote.Controllers
             return CreatedAtAction(nameof(PesquisarCategoria), new { id = categoria.IdCategoria }, categoria);
         }
 
+        [Authorize]
         [HttpPut("AlterarCategoria/{id}")]
         public IActionResult AlterarCategoria(int id, CategoriaDto categoriaDto)
         {
@@ -67,6 +70,7 @@ namespace PackAndPromote.Controllers
             return Ok(categoria);
         }
 
+        [Authorize]
         [HttpDelete("ExcluirCategoria/{id}")]
         public IActionResult ExcluirCategoria(int id)
         {
