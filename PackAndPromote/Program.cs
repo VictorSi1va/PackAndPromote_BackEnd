@@ -42,7 +42,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c => { c.SwaggerDoc("v1.0", new OpenApiInfo { Title = "Pack and Promote WebAPI DEV", Version = "v1.0" }); });
+builder.Services.AddSwaggerGen(c => { c.SwaggerDoc("v1.0", new OpenApiInfo { Title = "Pack and Promote WebAPI", Version = "v1.0" }); });
 
 var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings_PackAndPromote")
     ?? builder.Configuration.GetConnectionString("PackAndPromote");
