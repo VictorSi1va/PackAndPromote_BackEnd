@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using PackAndPromote.Controllers;
 using PackAndPromote.Database;
 using PackAndPromote.Dtos;
@@ -11,16 +12,30 @@ namespace PackAndPromote.Tests
     {
         private readonly DbPackAndPromote _context;
         private readonly LoginController _controller;
+        private readonly IConfiguration _configuration;
 
         public LoginTests()
         {
+            // Configuração de teste
+            var configurationBuilder = new ConfigurationBuilder()
+                .AddEnvironmentVariables();
+
+            _configuration = configurationBuilder.Build();
+
+            var secretKeyJWT = _configuration["Jwt_SecretKey"];
+
+            if (string.IsNullOrEmpty(secretKeyJWT))
+            {
+                throw new InvalidOperationException("A chave secreta JWT não está definida.");
+            }
+
             // Usa o Banco de Dados em Memória para os testes
             var options = new DbContextOptionsBuilder<DbPackAndPromote>()
                     .UseInMemoryDatabase(databaseName: "DatabaseTest")
                     .Options;
 
             _context = new DbPackAndPromote(options);
-            _controller = new LoginController(_context);
+            _controller = new LoginController(_configuration, _context);
         }
 
         [Fact]

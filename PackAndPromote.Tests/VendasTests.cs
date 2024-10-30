@@ -39,6 +39,20 @@ namespace PackAndPromote.Tests
         [Fact]
         public void RetornaOkResultAoListarLojas()
         {
+            // Arrange
+            var lojasExistentes = _context.Loja.ToList();
+            _context.Loja.RemoveRange(lojasExistentes);
+            _context.Loja.AddRange(new List<Loja>
+            {
+                new Loja { IdLoja = 22, NomeLoja = "Loja A", EnderecoLoja = "End A", DescricaoLoja = "Desc A",
+                    TelefoneLoja = "123456789", CNPJLoja = "12.345.678/0001-90", EmailLoja = "lojaA@example.com",
+                    DataCriacao = DateTime.Now },
+                new Loja { IdLoja = 23, NomeLoja = "Loja B", EnderecoLoja = "End B", DescricaoLoja = "Desc B",
+                    TelefoneLoja = "987654321", CNPJLoja = "98.765.432/0001-90", EmailLoja = "lojaB@example.com",
+                    DataCriacao = DateTime.Now }
+            });
+            _context.SaveChanges();
+
             // Act
             var result = _controller.ListarLojas();
 

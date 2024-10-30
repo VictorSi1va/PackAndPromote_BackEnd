@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PackAndPromote.Database;
 using PackAndPromote.Dtos;
 using PackAndPromote.Entities;
@@ -35,6 +36,7 @@ namespace PackAndPromote.Controllers
             return Ok(faixaEtaria);
         }
 
+        [Authorize]
         [HttpPost("CriarFaixaEtaria")]
         public ActionResult<FaixaEtaria> CriarFaixaEtaria(FaixaEtariaDto faixaEtariaDto)
         {
@@ -52,6 +54,7 @@ namespace PackAndPromote.Controllers
             return CreatedAtAction(nameof(PesquisarFaixaEtaria), new { id = faixaEtaria.IdFaixaEtaria }, faixaEtaria);
         }
 
+        [Authorize]
         [HttpPut("AlterarFaixaEtaria/{id}")]
         public IActionResult AlterarFaixaEtaria(int id, FaixaEtariaDto faixaEtariaDto)
         {
@@ -67,6 +70,7 @@ namespace PackAndPromote.Controllers
             return Ok(faixaEtaria);
         }
 
+        [Authorize]
         [HttpDelete("ExcluirFaixaEtaria/{id}")]
         public IActionResult ExcluirFaixaEtaria(int id)
         {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PackAndPromote.Database;
 using PackAndPromote.Dtos;
 using PackAndPromote.Entities;
@@ -35,6 +36,7 @@ namespace PackAndPromote.Controllers
             return Ok(publicoAlvo);
         }
 
+        [Authorize]
         [HttpPost("CriarPublicoAlvo")]
         public ActionResult<PublicoAlvo> CriarPublicoAlvo(PublicoAlvoDto publicoAlvoDto)
         {
@@ -52,6 +54,7 @@ namespace PackAndPromote.Controllers
             return CreatedAtAction(nameof(PesquisarPublicoAlvo), new { id = publicoAlvo.IdPublicoAlvo }, publicoAlvo);
         }
 
+        [Authorize]
         [HttpPut("AlterarPublicoAlvo/{id}")]
         public IActionResult AlterarPublicoAlvo(int id, PublicoAlvoDto publicoAlvoDto)
         {
@@ -67,6 +70,7 @@ namespace PackAndPromote.Controllers
             return Ok(publicoAlvo);
         }
 
+        [Authorize]
         [HttpDelete("ExcluirPublicoAlvo/{id}")]
         public IActionResult ExcluirPublicoAlvo(int id)
         {
