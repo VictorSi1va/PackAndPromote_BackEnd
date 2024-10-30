@@ -18,12 +18,16 @@ namespace PackAndPromote.Tests
         {
             // Configuração de teste
             var configurationBuilder = new ConfigurationBuilder()
-                .AddInMemoryCollection(new Dictionary<string, string>
-                {
-                { "Jwt:SecretKey", "S3CR3T-K3Y-P4CK-4ND-PR0M0T3-JWT-S3CUR1TY" },
-                });
+                .AddEnvironmentVariables();
 
             _configuration = configurationBuilder.Build();
+
+            var secretKeyJWT = _configuration["Jwt_SecretKey"];
+
+            if (string.IsNullOrEmpty(secretKeyJWT))
+            {
+                throw new InvalidOperationException("A chave secreta JWT não está definida.");
+            }
 
             // Usa o Banco de Dados em Memória para os testes
             var options = new DbContextOptionsBuilder<DbPackAndPromote>()
