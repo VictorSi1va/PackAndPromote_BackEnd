@@ -199,9 +199,9 @@ namespace PackAndPromote.Controllers
                 return Unauthorized("Login e/ou senha inválidos.");
             }
 
-            // Gerar Token JWT
+            // Token JWT
             var tokenHandler = new JwtSecurityTokenHandler();
-            var jwtSecretKey = _configuration["Jwt:SecretKey"]; // Chave JWT
+            var jwtSecretKey = _configuration["Jwt_SecretKey"]; // Chave JWT
             var key = Encoding.ASCII.GetBytes(jwtSecretKey);
 
             var tokenDescriptor = new SecurityTokenDescriptor

@@ -8,7 +8,8 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Configurações do JWT
-var jwtSecretKey = builder.Configuration["Jwt_SecretKey"];
+var jwtSecretKey = Environment.GetEnvironmentVariable("Jwt_SecretKey")
+    ?? builder.Configuration["Jwt_SecretKey"];
 
 if (string.IsNullOrEmpty(jwtSecretKey))
 {
@@ -43,14 +44,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c => { c.SwaggerDoc("v1.0", new OpenApiInfo { Title = "Pack and Promote WebAPI DEV", Version = "v1.0" }); });
 
+var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings_PackAndPromote")
+    ?? builder.Configuration.GetConnectionString("PackAndPromote");
+
 builder.Services.AddDbContext<DbPackAndPromote>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionStrings_PackAndPromote"), sqlOptions =>
-    {
-        sqlOptions.EnableRetryOnFailure(
-            maxRetryCount: 5,
-            maxRetryDelay: TimeSpan.FromSeconds(30),
-            errorNumbersToAdd: null);
-    }));
+            options.UseSqlServer(connectionString));
 
 // Configuração do CORS
 builder.Services.AddCors(options =>
