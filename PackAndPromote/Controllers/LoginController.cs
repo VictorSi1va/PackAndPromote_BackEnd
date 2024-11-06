@@ -160,7 +160,6 @@ namespace PackAndPromote.Controllers
             return user;
         }
 
-        [Authorize] // Requer autorização para acessar este endpoint
         [HttpPost("CriarUsuario")]
         public ActionResult<Usuario> CriarUsuario(UsuarioDto novoUsuarioDto)
         {
