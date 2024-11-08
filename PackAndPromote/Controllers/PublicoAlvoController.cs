@@ -10,6 +10,8 @@ namespace PackAndPromote.Controllers
     [ApiController]
     public class PublicoAlvoController : Controller
     {
+        #region Variáveis e Construtor
+
         private readonly DbPackAndPromote _dbPackAndPromote;
 
         // Construtor que injeta o contexto do banco de dados
@@ -18,6 +20,11 @@ namespace PackAndPromote.Controllers
             _dbPackAndPromote = _context; // Inicializa o contexto do banco de dados
         }
 
+        #endregion
+
+        #region Público Alvo - Métodos
+
+        #region Listar Públicos Alvo
         // Endpoint para listar todos os Públicos Alvo
         [HttpGet("ListarPublicosAlvo")]
         public ActionResult<IEnumerable<PublicoAlvo>> ListarPublicosAlvo()
@@ -27,7 +34,9 @@ namespace PackAndPromote.Controllers
 
             return Ok(listaRetorno); // Retorna um Ok com a lista de públicos alvo
         }
+        #endregion
 
+        #region Pesquisar Público Alvo por Id
         // Endpoint para pesquisar um Público Alvo pelo ID
         [HttpGet("PesquisarPublicoAlvo/{id}")]
         public ActionResult<PublicoAlvo> PesquisarPublicoAlvo(int id)
@@ -41,7 +50,9 @@ namespace PackAndPromote.Controllers
 
             return Ok(publicoAlvo); // Retorna o Público Alvo encontrado
         }
+        #endregion
 
+        #region Criar Público Alvo
         // Endpoint para criar um novo Público Alvo
         [Authorize] // Requer autorização
         [HttpPost("CriarPublicoAlvo")]
@@ -64,7 +75,9 @@ namespace PackAndPromote.Controllers
             // Retorna o Público Alvo criado com CreatedAtAction
             return CreatedAtAction(nameof(PesquisarPublicoAlvo), new { id = publicoAlvo.IdPublicoAlvo }, publicoAlvo);
         }
+        #endregion
 
+        #region Alterar Público Alvo
         // Endpoint para alterar um Público Alvo existente
         [Authorize] // Requer autorização
         [HttpPut("AlterarPublicoAlvo/{id}")]
@@ -85,7 +98,9 @@ namespace PackAndPromote.Controllers
 
             return Ok(publicoAlvo); // Retorna o Público Alvo atualizado
         }
+        #endregion
 
+        #region Excluir Público Alvo
         // Endpoint para excluir um Público Alvo existente pelo ID
         [Authorize] // Requer autorização
         [HttpDelete("ExcluirPublicoAlvo/{id}")]
@@ -104,5 +119,8 @@ namespace PackAndPromote.Controllers
 
             return Ok(); // Retorna uma confirmação de sucesso
         }
+        #endregion
+
+        #endregion
     }
 }

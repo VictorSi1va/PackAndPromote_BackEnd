@@ -10,6 +10,8 @@ namespace PackAndPromote.Controllers
     [ApiController]
     public class CategoriaController : Controller
     {
+        #region Variáveis e Construtor
+
         private readonly DbPackAndPromote _dbPackAndPromote;
 
         public CategoriaController(DbPackAndPromote _context)
@@ -17,6 +19,11 @@ namespace PackAndPromote.Controllers
             _dbPackAndPromote = _context; // Injeta o contexto de banco de dados na controller.
         }
 
+        #endregion
+
+        #region Categoria - Métodos
+
+        #region Listar Categorias
         [HttpGet("ListarCategorias")]
         public ActionResult<IEnumerable<Categoria>> ListarCategorias()
         {
@@ -26,7 +33,9 @@ namespace PackAndPromote.Controllers
             // Retorna uma resposta HTTP 200 (OK) com a lista de categorias.
             return Ok(categorias);
         }
+        #endregion
 
+        #region Pesquisar Categoria por Id
         [HttpGet("PesquisarCategoria/{id}")]
         public ActionResult<Categoria> PesquisarCategoria(int id)
         {
@@ -40,7 +49,9 @@ namespace PackAndPromote.Controllers
             // Retorna uma resposta HTTP 200 (OK) com a categoria encontrada.
             return Ok(categoria);
         }
+        #endregion
 
+        #region Criar Categoria
         [Authorize]
         [HttpPost("CriarCategoria")]
         public ActionResult<Categoria> CriarCategoria(CategoriaDto categoriaDto)
@@ -62,7 +73,9 @@ namespace PackAndPromote.Controllers
             // Retorna uma resposta HTTP 201 (Created), incluindo a rota para acessar a nova categoria.
             return CreatedAtAction(nameof(PesquisarCategoria), new { id = categoria.IdCategoria }, categoria);
         }
+        #endregion
 
+        #region Alterar Categoria
         [Authorize]
         [HttpPut("AlterarCategoria/{id}")]
         public IActionResult AlterarCategoria(int id, CategoriaDto categoriaDto)
@@ -83,7 +96,9 @@ namespace PackAndPromote.Controllers
             // Retorna uma resposta HTTP 200 (OK) com a categoria atualizada.
             return Ok(categoria);
         }
+        #endregion
 
+        #region Excluir Categoria
         [Authorize]
         [HttpDelete("ExcluirCategoria/{id}")]
         public IActionResult ExcluirCategoria(int id)
@@ -102,5 +117,8 @@ namespace PackAndPromote.Controllers
             // Retorna uma resposta HTTP 200 (OK) para indicar que a exclusão foi realizada com sucesso.
             return Ok();
         }
+        #endregion
+
+        #endregion
     }
 }

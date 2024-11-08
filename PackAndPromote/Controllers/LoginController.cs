@@ -14,6 +14,8 @@ namespace PackAndPromote.Controllers
     [ApiController]
     public class LoginController : ControllerBase
     {
+        #region Variáveis e Construtor
+
         // Campos privados que armazenam a instância do banco de dados e as configurações
         private readonly DbPackAndPromote _dbPackAndPromote;
         private readonly IConfiguration _configuration;
@@ -25,15 +27,23 @@ namespace PackAndPromote.Controllers
             _dbPackAndPromote = context;
         }
 
+        #endregion
+
+        #region Login - Métodos
+
+        #region Perfil
+
+        #region Listar Perfis
         // Endpoint para listar todos os perfis armazenados no banco de dados
-        [Authorize] // Requer autorização para acessar este endpoint
         [HttpGet("ListarPerfis")]
         public ActionResult<IEnumerable<Perfil>> ListarPerfis()
         {
             // Obtém e retorna todos os perfis armazenados no banco de dados
             return _dbPackAndPromote.Perfil.ToList(); // Retorna uma lista com todos os perfis
         }
+        #endregion
 
+        #region Pesquisar Perfil por Id
         // Endpoint para pesquisar um perfil específico pelo ID
         [Authorize] // Requer autorização para acessar este endpoint
         [HttpGet("PesquisarPerfil/{id}")]
@@ -51,7 +61,9 @@ namespace PackAndPromote.Controllers
             // Retorna o perfil encontrado
             return perfil;
         }
+        #endregion
 
+        #region Criar Perfil
         // Endpoint para criar um novo perfil com base nos dados enviados
         [Authorize] // Requer autorização para acessar este endpoint
         [HttpPost("CriarPerfil")]
@@ -75,7 +87,9 @@ namespace PackAndPromote.Controllers
             // Retorna o perfil criado com a localização (URL) do recurso criado
             return CreatedAtAction(nameof(PesquisarPerfil), new { id = perfil.IdPerfil }, perfil);
         }
+        #endregion
 
+        #region Alterar Perfil
         // Endpoint para alterar os dados de um perfil existente pelo ID
         [Authorize] // Requer autorização para acessar este endpoint
         [HttpPut("AlterarPerfil/{id}")]
@@ -100,7 +114,9 @@ namespace PackAndPromote.Controllers
             // Retorna o perfil atualizado como resposta
             return Ok(perfil);
         }
+        #endregion
 
+        #region Excluir Perfil
         // Endpoint para excluir um perfil específico pelo ID
         [Authorize] // Requer autorização para acessar este endpoint
         [HttpDelete("ExcluirPerfil/{id}")]
@@ -122,7 +138,13 @@ namespace PackAndPromote.Controllers
             // Retorna uma mensagem de confirmação
             return Ok("Perfil excluído com sucesso!");
         }
+        #endregion
 
+        #endregion
+
+        #region Usuário
+
+        #region Listar Usuários
         [Authorize] // Requer autorização para acessar este endpoint
         [HttpGet("ListarUsuarios")]
         public ActionResult<IEnumerable<UsuarioSimplesDto>> ListarUsuarios()
@@ -138,7 +160,9 @@ namespace PackAndPromote.Controllers
 
             return usuarios;
         }
+        #endregion
 
+        #region Pesquisar Usuário por Id
         [Authorize] // Requer autorização para acessar este endpoint
         [HttpGet("PesquisarUsuario/{id}")]
         public ActionResult<UsuarioSimplesDto> PesquisarUsuario(int id)
@@ -159,7 +183,9 @@ namespace PackAndPromote.Controllers
 
             return user;
         }
+        #endregion
 
+        #region Criar Usuário
         [HttpPost("CriarUsuario")]
         public ActionResult<Usuario> CriarUsuario(UsuarioDto novoUsuarioDto)
         {
@@ -203,7 +229,9 @@ namespace PackAndPromote.Controllers
 
             return CreatedAtAction(nameof(PesquisarUsuario), new { id = usuario.IdUsuario }, usuario);
         }
+        #endregion
 
+        #region Entrar
         // Endpoint para login e geração de um token JWT para autenticação
         [HttpPost("Entrar")]
         public IActionResult Entrar(LoginDto loginDto)
@@ -244,8 +272,9 @@ namespace PackAndPromote.Controllers
             // Retorna o token JWT gerado como resposta
             return Ok(new { Token = tokenString });
         }
+        #endregion
 
-
+        #region Redefinir Senha
         [HttpPut("RedefinirSenha/{id}")]
         public IActionResult RedefinirSenha(int id, NovaSenhaDto novaSenhaDto)
         {
@@ -267,7 +296,9 @@ namespace PackAndPromote.Controllers
             // Retorna um status 200 OK com uma mensagem de sucesso
             return Ok("Senha alterada com sucesso.");
         }
+        #endregion
 
+        #region Alterar Usuário
         [Authorize] // Requer autorização para acessar este endpoint
         [HttpPut("AlterarUsuario/{id}")]
         public IActionResult AlterarUsuario(int id, UsuarioAlteradoDto usuarioAlteradoDto)
@@ -308,7 +339,9 @@ namespace PackAndPromote.Controllers
             // Retorna um status 200 OK com uma mensagem de sucesso
             return Ok("Usuário alterado com sucesso!");
         }
+        #endregion
 
+        #region Excluir Usuário
         [Authorize] // Requer autorização para acessar este endpoint
         [HttpDelete("ExcluirUsuario/{id}")]
         public IActionResult ExcluirUsuario(int id)
@@ -343,5 +376,10 @@ namespace PackAndPromote.Controllers
             // Retorna um status 200 OK com uma mensagem de sucesso
             return Ok("Usuário excluído com sucesso!");
         }
+        #endregion
+
+        #endregion
+
+        #endregion
     }
 }

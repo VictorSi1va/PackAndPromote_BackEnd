@@ -10,6 +10,8 @@ namespace PackAndPromote.Controllers
     [ApiController]
     public class PreferenciaAlvoController : Controller
     {
+        #region Variáveis e Construtor
+
         private readonly DbPackAndPromote _dbPackAndPromote;
 
         // Construtor que injeta o contexto do banco de dados
@@ -18,6 +20,11 @@ namespace PackAndPromote.Controllers
             _dbPackAndPromote = _context;
         }
 
+        #endregion
+
+        #region Preferência Alvo - Métodos
+
+        #region Listar Preferências Alvo
         // Endpoint para listar todas as PreferenciasAlvo
         [HttpGet("ListarPreferenciasAlvo")]
         public ActionResult<IEnumerable<PreferenciaAlvo>> ListarPreferenciasAlvo()
@@ -27,7 +34,9 @@ namespace PackAndPromote.Controllers
 
             return Ok(listaRetorno); // Retorna um Ok com a lista de preferências
         }
+        #endregion
 
+        #region Pesquisar Preferência Alvo por Id
         // Endpoint para pesquisar uma PreferenciaAlvo pelo ID
         [HttpGet("PesquisarPreferenciaAlvo/{id}")]
         public ActionResult<PreferenciaAlvo> PesquisarPreferenciaAlvo(int id)
@@ -41,7 +50,9 @@ namespace PackAndPromote.Controllers
 
             return Ok(preferenciaAlvo); // Retorna a PreferenciaAlvo encontrada
         }
+        #endregion
 
+        #region Criar Preferência Alvo
         // Endpoint para criar uma nova PreferenciaAlvo
         [Authorize] // Requer autorização
         [HttpPost("CriarPreferenciaAlvo")]
@@ -64,7 +75,9 @@ namespace PackAndPromote.Controllers
             // Retorna a PreferenciaAlvo criada com CreatedAtAction
             return CreatedAtAction(nameof(PesquisarPreferenciaAlvo), new { id = preferenciaAlvo.IdPreferenciaAlvo }, preferenciaAlvo);
         }
+        #endregion
 
+        #region Alterar Preferência Alvo
         // Endpoint para alterar uma PreferenciaAlvo existente
         [Authorize] // Requer autorização
         [HttpPut("AlterarPreferenciaAlvo/{id}")]
@@ -85,7 +98,9 @@ namespace PackAndPromote.Controllers
 
             return Ok(preferenciaAlvo); // Retorna a PreferenciaAlvo atualizada
         }
+        #endregion
 
+        #region Excluir Preferência Alvo
         // Endpoint para excluir uma PreferenciaAlvo existente pelo ID
         [Authorize] // Requer autorização
         [HttpDelete("ExcluirPreferenciaAlvo/{id}")]
@@ -104,5 +119,8 @@ namespace PackAndPromote.Controllers
 
             return Ok(); // Retorna uma confirmação de sucesso
         }
+        #endregion
+
+        #endregion
     }
 }

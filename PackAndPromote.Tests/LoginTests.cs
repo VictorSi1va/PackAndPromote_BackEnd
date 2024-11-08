@@ -10,6 +10,8 @@ namespace PackAndPromote.Tests
 {
     public class LoginTests
     {
+        #region Variáveis e Construtor
+
         // Campos privados para o contexto de banco de dados em memória, o controller de login e as configurações da aplicação
         private readonly DbPackAndPromote _context;
         private readonly LoginController _controller;
@@ -38,6 +40,11 @@ namespace PackAndPromote.Tests
             _controller = new LoginController(_configuration, _context); // Inicializa a controller de login com as configurações e contexto
         }
 
+        #endregion
+
+        #region Login - Testes
+
+        #region RetornaOkResultAoListarPerfis
         [Fact]
         public void RetornaOkResultAoListarPerfis()
         {
@@ -53,7 +60,9 @@ namespace PackAndPromote.Tests
             var okResult = Assert.IsType<List<Perfil>>(result.Value);
             Assert.Equal(2, okResult.Count);
         }
+        #endregion
 
+        #region RetornaNotFoundResultQuandoPerfilNaoExistirAoPesquisar
         [Fact]
         public void RetornaNotFoundResultQuandoPerfilNaoExistirAoPesquisar()
         {
@@ -63,7 +72,9 @@ namespace PackAndPromote.Tests
             // Assert - Verifica se o resultado é NotFound
             Assert.IsType<NotFoundResult>(result.Result);
         }
+        #endregion
 
+        #region RetornaCreatedResultQuandoUsuarioForCriado
         [Fact]
         public void RetornaCreatedResultQuandoUsuarioForCriado()
         {
@@ -93,5 +104,8 @@ namespace PackAndPromote.Tests
             var usuario = Assert.IsType<Usuario>(createdResult.Value);
             Assert.Equal("usuario1", usuario.Login);
         }
+        #endregion
+
+        #endregion
     }
 }
