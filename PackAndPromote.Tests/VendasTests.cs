@@ -9,6 +9,8 @@ namespace PackAndPromote.Tests
 {
     public class VendasTests
     {
+        #region Variáveis e Construtor
+
         // Contexto do banco de dados em memória usado para testes
         private readonly DbPackAndPromote _context;
         // Controller de Vendas a ser testado
@@ -43,6 +45,11 @@ namespace PackAndPromote.Tests
             _context.SaveChanges();
         }
 
+        #endregion
+
+        #region Vendas - Testes
+
+        #region RetornaOkResultAoListarLojas
         // Testa se o método ListarLojas retorna um resultado Ok quando há lojas
         [Fact]
         public void RetornaOkResultAoListarLojas()
@@ -71,7 +78,9 @@ namespace PackAndPromote.Tests
             // Verifica se a quantidade de lojas retornadas está correta
             Assert.Equal(2, lojas.Count);
         }
+        #endregion
 
+        #region RetornaOkResultAoEncontrarLojaExistesteAoPesquisar
         // Testa se o método PesquisarLoja retorna um resultado Ok para uma loja existente
         [Fact]
         public void RetornaOkResultAoEncontrarLojaExistesteAoPesquisar()
@@ -87,7 +96,9 @@ namespace PackAndPromote.Tests
             Assert.Equal(22, loja.IdLoja);
             Assert.Equal("Loja A", loja.NomeLoja);
         }
+        #endregion
 
+        #region RetornaOkResultAoAlterarLojaExistente
         // Testa se o método AlterarLoja atualiza corretamente uma loja existente
         [Fact]
         public void RetornaOkResultAoAlterarLojaExistente()
@@ -116,5 +127,8 @@ namespace PackAndPromote.Tests
             var lojaAtualizada = _context.Loja.Find(22);
             Assert.Equal("Loja A Alterada", lojaAtualizada.NomeLoja);
         }
+        #endregion
+
+        #endregion
     }
 }

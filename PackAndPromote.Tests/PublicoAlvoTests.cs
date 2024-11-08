@@ -9,6 +9,8 @@ namespace PackAndPromote.Tests
 {
     public class PublicoAlvoTests
     {
+        #region Variáveis e Construtor
+
         private readonly DbPackAndPromote _context;
         private readonly PublicoAlvoController _controller;
 
@@ -24,6 +26,11 @@ namespace PackAndPromote.Tests
             _controller = new PublicoAlvoController(_context); // Inicializa a controller com o contexto
         }
 
+        #endregion
+
+        #region Público Alvo - Testes
+
+        #region RetornaOkResultComListaVaziaQuandoNaoExistirPublicoAlvoAoListar
         [Fact]
         public void RetornaOkResultComListaVaziaQuandoNaoExistirPublicoAlvoAoListar()
         {
@@ -35,7 +42,9 @@ namespace PackAndPromote.Tests
             var publicosAlvo = Assert.IsAssignableFrom<IEnumerable<PublicoAlvo>>(okResult.Value);
             Assert.Empty(publicosAlvo); // Verifica se a lista retornada está vazia
         }
+        #endregion
 
+        #region RetornaBadRequestResultQuandoDescricaoForNulaOuVaziaAoCriarPublicoAlvo
         [Fact]
         public void RetornaBadRequestResultQuandoDescricaoForNulaOuVaziaAoCriarPublicoAlvo()
         {
@@ -48,7 +57,9 @@ namespace PackAndPromote.Tests
             // Assert: Verifica se o resultado é do tipo BadRequestObjectResult
             var badRequestResult = Assert.IsType<BadRequestObjectResult>(result.Result);
         }
+        #endregion
 
+        #region RetornaNotFoundResultQuandoPublicoAlvoNaoExistirAoExcluir
         [Fact]
         public void RetornaNotFoundResultQuandoPublicoAlvoNaoExistirAoExcluir()
         {
@@ -61,5 +72,8 @@ namespace PackAndPromote.Tests
             // Assert: Verifica se o resultado é do tipo NotFoundResult
             Assert.IsType<NotFoundResult>(result);
         }
+        #endregion
+
+        #endregion
     }
 }

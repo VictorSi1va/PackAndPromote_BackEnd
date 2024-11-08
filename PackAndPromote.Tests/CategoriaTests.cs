@@ -9,6 +9,8 @@ namespace PackAndPromote.Tests
 {
     public class CategoriaTests
     {
+        #region Variáveis e Construtor
+
         private readonly DbPackAndPromote _context;
         private readonly CategoriaController _controller;
 
@@ -23,6 +25,11 @@ namespace PackAndPromote.Tests
             _controller = new CategoriaController(_context); // Instancia a controller de categorias, injetando o contexto.
         }
 
+        #endregion
+
+        #region Categoria - Testes
+
+        #region RetornaOkResultAoListarCategorias
         [Fact]
         public void RetornaOkResultAoListarCategorias()
         {
@@ -39,7 +46,9 @@ namespace PackAndPromote.Tests
             var categorias = Assert.IsAssignableFrom<IEnumerable<Categoria>>(okResult.Value); // Garante que o valor é uma lista de categorias.
             Assert.Equal(2, categorias.Count()); // Verifica se o número de categorias retornadas é 2.
         }
+        #endregion
 
+        #region RetornaOkResultQuandoCategoriaExistirAoPesquisar
         [Fact]
         public void RetornaOkResultQuandoCategoriaExistirAoPesquisar()
         {
@@ -56,7 +65,9 @@ namespace PackAndPromote.Tests
             var returnedCategoria = Assert.IsType<Categoria>(okResult.Value); // Confirma que o valor é do tipo Categoria.
             Assert.Equal(categoria.NomeCategoria, returnedCategoria.NomeCategoria); // Compara o nome da categoria original com a retornada.
         }
+        #endregion
 
+        #region RetornaCreatedResultQuandoCategoriaForCriada
         [Fact]
         public void RetornaCreatedResultQuandoCategoriaForCriada()
         {
@@ -71,5 +82,8 @@ namespace PackAndPromote.Tests
             var categoria = Assert.IsType<Categoria>(createdResult.Value); // Confirma que o valor é do tipo Categoria.
             Assert.Equal(categoriaDto.NomeCategoria, categoria.NomeCategoria); // Compara o nome do DTO com o nome da categoria criada.
         }
+        #endregion
+
+        #endregion
     }
 }

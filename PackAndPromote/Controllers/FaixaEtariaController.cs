@@ -10,6 +10,8 @@ namespace PackAndPromote.Controllers
     [ApiController]
     public class FaixaEtariaController : Controller
     {
+        #region Variáveis e Construtor
+
         private readonly DbPackAndPromote _dbPackAndPromote; // Contexto de banco de dados.
 
         public FaixaEtariaController(DbPackAndPromote _context)
@@ -17,6 +19,11 @@ namespace PackAndPromote.Controllers
             _dbPackAndPromote = _context; // Injeta o contexto de banco de dados na controller.
         }
 
+        #endregion
+
+        #region Faixa Etária - Métodos
+
+        #region Listar Faixas Etárias
         [HttpGet("ListarFaixasEtarias")]
         public ActionResult<IEnumerable<FaixaEtaria>> ListarFaixasEtarias()
         {
@@ -26,7 +33,9 @@ namespace PackAndPromote.Controllers
             // Retorna uma resposta HTTP 200 (OK) com a lista de faixas etárias.
             return Ok(listaRetorno);
         }
+        #endregion
 
+        #region Pesquisar Faixa Etária por Id
         [HttpGet("PesquisarFaixaEtaria/{id}")]
         public ActionResult<FaixaEtaria> PesquisarFaixaEtaria(int id)
         {
@@ -40,7 +49,9 @@ namespace PackAndPromote.Controllers
             // Retorna uma resposta HTTP 200 (OK) com a faixa etária encontrada.
             return Ok(faixaEtaria);
         }
+        #endregion
 
+        #region Criar Faixa Etária
         [Authorize] // Requer autorização para criar uma faixa etária.
         [HttpPost("CriarFaixaEtaria")]
         public ActionResult<FaixaEtaria> CriarFaixaEtaria(FaixaEtariaDto faixaEtariaDto)
@@ -62,7 +73,9 @@ namespace PackAndPromote.Controllers
             // Retorna uma resposta HTTP 201 (Created), incluindo a rota para acessar a nova faixa etária.
             return CreatedAtAction(nameof(PesquisarFaixaEtaria), new { id = faixaEtaria.IdFaixaEtaria }, faixaEtaria);
         }
+        #endregion
 
+        #region Alterar Faixa Etária
         [Authorize] // Requer autorização para atualizar uma faixa etária.
         [HttpPut("AlterarFaixaEtaria/{id}")]
         public IActionResult AlterarFaixaEtaria(int id, FaixaEtariaDto faixaEtariaDto)
@@ -83,7 +96,9 @@ namespace PackAndPromote.Controllers
             // Retorna uma resposta HTTP 200 (OK) com a faixa etária atualizada.
             return Ok(faixaEtaria);
         }
+        #endregion
 
+        #region Excluir Faixa Etária
         [Authorize] // Requer autorização para excluir uma faixa etária.
         [HttpDelete("ExcluirFaixaEtaria/{id}")]
         public IActionResult ExcluirFaixaEtaria(int id)
@@ -102,5 +117,8 @@ namespace PackAndPromote.Controllers
             // Retorna uma resposta HTTP 200 (OK) para indicar a exclusão bem-sucedida.
             return Ok();
         }
+        #endregion
+
+        #endregion
     }
 }

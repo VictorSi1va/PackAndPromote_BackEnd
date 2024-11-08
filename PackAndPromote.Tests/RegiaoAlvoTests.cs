@@ -9,6 +9,8 @@ namespace PackAndPromote.Tests
 {
     public class RegiaoAlvoTests
     {
+        #region Variáveis e Construtor
+
         private readonly DbPackAndPromote _context; // Contexto do banco de dados
         private readonly RegiaoAlvoController _controller; // Controller que será testado
 
@@ -24,6 +26,11 @@ namespace PackAndPromote.Tests
             _controller = new RegiaoAlvoController(_context); // Inicializa a controller com o contexto
         }
 
+        #endregion
+
+        #region Região Alvo - Testes
+
+        #region RetornaOkResultAoListarRegioes
         [Fact]
         public void RetornaOkResultAoListarRegioes()
         {
@@ -40,7 +47,9 @@ namespace PackAndPromote.Tests
             var regioes = Assert.IsType<List<RegiaoAlvo>>(okResult.Value);
             Assert.Equal(2, regioes.Count); // Verifica se a contagem das regiões é igual a 2
         }
+        #endregion
 
+        #region RetornaNotFoundResultQuandoNaoExistirRegiaoAlvoAoPesquisar
         [Fact]
         public void RetornaNotFoundResultQuandoNaoExistirRegiaoAlvoAoPesquisar()
         {
@@ -50,7 +59,9 @@ namespace PackAndPromote.Tests
             // Assert: Verifica se o resultado é do tipo NotFoundResult
             Assert.IsType<NotFoundResult>(result.Result);
         }
+        #endregion
 
+        #region RetornaCreatedResultAoCriarRegiaoAlvo
         [Fact]
         public void RetornaCreatedResultAoCriarRegiaoAlvo()
         {
@@ -65,5 +76,8 @@ namespace PackAndPromote.Tests
             var regiaoAlvo = Assert.IsType<RegiaoAlvo>(createdResult.Value);
             Assert.Equal("Nova Região", regiaoAlvo.NomeRegiaoAlvo); // Verifica se o nome da região corresponde ao esperado
         }
+        #endregion
+
+        #endregion
     }
 }

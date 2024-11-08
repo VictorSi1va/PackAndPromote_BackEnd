@@ -9,6 +9,8 @@ namespace PackAndPromote.Tests
 {
     public class PreferenciaAlvoTests
     {
+        #region Variáveis e Construtor
+
         private readonly DbPackAndPromote _context;
         private readonly PreferenciaAlvoController _controller;
 
@@ -24,6 +26,11 @@ namespace PackAndPromote.Tests
             _controller = new PreferenciaAlvoController(_context); // Inicializa a controller com o contexto
         }
 
+        #endregion
+
+        #region Preferência Alvo - Testes
+
+        #region RetornaOkResultAoListarPreferenciasAlvo
         [Fact]
         public void RetornaOkResultAoListarPreferenciasAlvo()
         {
@@ -40,7 +47,9 @@ namespace PackAndPromote.Tests
             var preferenciasAlvo = Assert.IsAssignableFrom<IEnumerable<PreferenciaAlvo>>(okResult.Value);
             Assert.Equal(2, preferenciasAlvo.Count()); // Verifica se a lista contém 2 itens
         }
+        #endregion
 
+        #region RetornaCreatedResultQuandoPreferenciaAlvoForCriada
         [Fact]
         public void RetornaCreatedResultQuandoPreferenciaAlvoForCriada()
         {
@@ -55,7 +64,9 @@ namespace PackAndPromote.Tests
             var preferenciaAlvo = Assert.IsType<PreferenciaAlvo>(createdResult.Value);
             Assert.Equal(preferenciaAlvoDto.DescricaoPreferenciaAlvo, preferenciaAlvo.DescricaoPreferenciaAlvo);
         }
+        #endregion
 
+        #region RetornaNotFoundResultQuandoPreferenciaAlvoNaoExistirAoAlterar
         [Fact]
         public void RetornaNotFoundResultQuandoPreferenciaAlvoNaoExistirAoAlterar()
         {
@@ -69,5 +80,8 @@ namespace PackAndPromote.Tests
             // Assert: Verifica se o resultado é do tipo NotFoundResult
             Assert.IsType<NotFoundResult>(result);
         }
+        #endregion
+
+        #endregion
     }
 }

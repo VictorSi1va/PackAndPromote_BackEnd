@@ -9,6 +9,8 @@ namespace PackAndPromote.Tests
 {
     public class FaixaEtariaTests
     {
+        #region Variáveis e Construtor
+
         private readonly DbPackAndPromote _context; // Contexto do banco de dados em memória para testes.
         private readonly FaixaEtariaController _controller; // Controller de FaixaEtaria para ser testada.
 
@@ -23,6 +25,11 @@ namespace PackAndPromote.Tests
             _controller = new FaixaEtariaController(_context); // Instancia a controller de FaixaEtaria com o contexto.
         }
 
+        #endregion
+
+        #region Faixa Etária - Testes
+
+        #region RetornaOkResultQuandoFaixaEtariaForAlterada
         [Fact]
         public void RetornaOkResultQuandoFaixaEtariaForAlterada()
         {
@@ -42,7 +49,9 @@ namespace PackAndPromote.Tests
             var updatedFaixaEtaria = Assert.IsType<FaixaEtaria>(okResult.Value); // Verifica que o valor retornado é uma FaixaEtaria.
             Assert.Equal(faixaEtariaDto.DescricaoFaixaEtaria, updatedFaixaEtaria.DescricaoFaixaEtaria); // Compara a nova descrição.
         }
+        #endregion
 
+        #region RetornaOkResultQuandoFaixaEtariaForExcluida
         [Fact]
         public void RetornaOkResultQuandoFaixaEtariaForExcluida()
         {
@@ -58,7 +67,9 @@ namespace PackAndPromote.Tests
             Assert.IsType<OkResult>(result); // Verifica se o retorno é do tipo OkResult.
             Assert.Null(_context.FaixaEtaria.Find(faixaEtaria.IdFaixaEtaria)); // Confirma que a faixa etária não existe mais no banco.
         }
+        #endregion
 
+        #region RetornaBadRequestResultQuandoDescricaoForVaziaAoCriarFaixaEtaria
         [Fact]
         public void RetornaBadRequestResultQuandoDescricaoForVaziaAoCriarFaixaEtaria()
         {
@@ -71,5 +82,8 @@ namespace PackAndPromote.Tests
             // Assert: Verifica se o resultado é um BadRequestObjectResult, indicando uma entrada inválida.
             var badRequestResult = Assert.IsType<BadRequestObjectResult>(result.Result); // Verifica que o retorno é um BadRequest.
         }
+        #endregion
+
+        #endregion
     }
 }

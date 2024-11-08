@@ -10,6 +10,8 @@ namespace PackAndPromote.Controllers
     [ApiController]
     public class RegiaoAlvoController : Controller
     {
+        #region Variáveis e Construtor
+
         private readonly DbPackAndPromote _dbPackAndPromote; // Contexto do banco de dados
 
         // Construtor que injeta o contexto do banco de dados
@@ -18,6 +20,11 @@ namespace PackAndPromote.Controllers
             _dbPackAndPromote = _context; // Inicializa o contexto do banco de dados
         }
 
+        #endregion
+
+        #region Região Alvo - Métodos
+
+        #region Listar Regiões Alvo
         // Endpoint para listar todas as regiões alvo
         [HttpGet("ListarRegioesAlvo")]
         public ActionResult<IEnumerable<RegiaoAlvo>> ListarRegioesAlvo()
@@ -27,7 +34,9 @@ namespace PackAndPromote.Controllers
 
             return Ok(regioes); // Retorna um Ok com a lista de regiões alvo
         }
+        #endregion
 
+        #region Pesquisar Região Alvo por Id
         // Endpoint para pesquisar uma região alvo pelo ID
         [HttpGet("PesquisarRegiaoAlvo/{id}")]
         public ActionResult<RegiaoAlvo> PesquisarRegiaoAlvo(int id)
@@ -41,7 +50,9 @@ namespace PackAndPromote.Controllers
 
             return Ok(regiaoAlvo); // Retorna a região alvo encontrada
         }
+        #endregion
 
+        #region Criar Região Alvo
         // Endpoint para criar uma nova região alvo
         [Authorize] // Requer autorização
         [HttpPost("CriarRegiaoAlvo")]
@@ -64,7 +75,9 @@ namespace PackAndPromote.Controllers
             // Retorna a nova região alvo criada com CreatedAtAction
             return CreatedAtAction(nameof(PesquisarRegiaoAlvo), new { id = regiaoAlvo.IdRegiaoAlvo }, regiaoAlvo);
         }
+        #endregion
 
+        #region Alterar Região Alvo
         // Endpoint para alterar uma região alvo existente
         [Authorize] // Requer autorização
         [HttpPut("AlterarRegiaoAlvo/{id}")]
@@ -85,7 +98,9 @@ namespace PackAndPromote.Controllers
 
             return Ok(regiaoAlvo); // Retorna a região alvo atualizada
         }
+        #endregion
 
+        #region Excluir Região Alvo
         // Endpoint para excluir uma região alvo existente pelo ID
         [Authorize] // Requer autorização
         [HttpDelete("ExcluirRegiaoAlvo/{id}")]
@@ -104,5 +119,8 @@ namespace PackAndPromote.Controllers
 
             return Ok(); // Retorna uma confirmação de sucesso
         }
+        #endregion
+
+        #endregion
     }
 }

@@ -7,11 +7,12 @@ using PackAndPromote.Entities;
 
 namespace PackAndPromote.Controllers
 {
-    // Define a rota base para a controller de Vendas
     [Route("[controller]")]
     [ApiController]
     public class VendasController : Controller
     {
+        #region Variáveis e Construtor
+
         // Contexto do banco de dados
         private readonly DbPackAndPromote _dbPackAndPromote;
 
@@ -21,6 +22,11 @@ namespace PackAndPromote.Controllers
             _dbPackAndPromote = _context;
         }
 
+        #endregion
+
+        #region Vendas - Métodos
+
+        #region Listar Lojas
         // Endpoint para listar todas as lojas
         [HttpGet("ListarLojas")]
         public ActionResult<IEnumerable<LojaDto>> ListarLojas()
@@ -43,7 +49,9 @@ namespace PackAndPromote.Controllers
             // Retorna as lojas encapsuladas em um resultado Ok
             return Ok(lojas);
         }
+        #endregion
 
+        #region Pesquisar Loja por Id
         // Endpoint para pesquisar uma loja pelo ID
         [HttpGet("PesquisarLoja/{id}")]
         public ActionResult<LojaDto> PesquisarLoja(int id)
@@ -71,7 +79,9 @@ namespace PackAndPromote.Controllers
             // Retorna a loja encontrada encapsulada em um resultado Ok
             return Ok(lojaPesquisada);
         }
+        #endregion
 
+        #region Alterar Loja
         // Endpoint para alterar os dados de uma loja existente
         [Authorize]
         [HttpPut("AlterarLoja/{id}")]
@@ -98,7 +108,9 @@ namespace PackAndPromote.Controllers
             // Retorna uma mensagem de sucesso
             return Ok("Loja alterada com sucesso!");
         }
+        #endregion
 
+        #region Listar Pedidos Embalagem
         // Endpoint para listar todos os pedidos de embalagem
         [Authorize]
         [HttpGet("ListarPedidosEmbalagem")]
@@ -134,8 +146,9 @@ namespace PackAndPromote.Controllers
             // Retorna os pedidos encapsulados em um resultado Ok
             return Ok(pedidos);
         }
+        #endregion
 
-
+        #region Pesquisar Pedido Embalagem
         [Authorize]
         [HttpGet("PesquisarPedidoEmbalagem/{id}")]
         public ActionResult<PedidoEmbalagemDto> PesquisarPedidoEmbalagem(int id)
@@ -174,7 +187,9 @@ namespace PackAndPromote.Controllers
             // Retorna um status 200 OK com os dados do pedido de embalagem
             return Ok(pedidoEmbalagem);
         }
+        #endregion
 
+        #region Criar Pedido Embalagem
         [Authorize]
         [HttpPost("CriarPedidoEmbalagem")]
         public ActionResult<PedidoEmbalagemSimplesDto> CriarPedidoEmbalagem(PedidoEmbalagemSimplesDto pedido)
@@ -221,7 +236,9 @@ namespace PackAndPromote.Controllers
             // Retorna um status 201 Created com a localização do novo pedido
             return CreatedAtAction(nameof(PesquisarPedidoEmbalagem), new { id = pedidoEmbalagem.IdPedidoEmbalagem }, pedidoEmbalagem);
         }
+        #endregion
 
+        #region Alterar Pedido Embalagem
         [Authorize]
         [HttpPut("AlterarPedidoEmbalagem/{id}")]
         public IActionResult AlterarPedidoEmbalagem(int id, PedidoEmbalagemAlteradoDto pedidoAlteradoDto)
@@ -244,7 +261,9 @@ namespace PackAndPromote.Controllers
             // Retorna um status 200 OK com uma mensagem de sucesso
             return Ok("Pedido alterado com sucesso!");
         }
+        #endregion
 
+        #region Excluir Pedido Embalagem
         [Authorize]
         [HttpDelete("ExcluirPedidoEmbalagem/{id}")]
         public IActionResult ExcluirPedidoEmbalagem(int id)
@@ -263,5 +282,8 @@ namespace PackAndPromote.Controllers
             // Retorna um status 200 OK com uma mensagem de sucesso
             return Ok("Pedido excluído com sucesso!");
         }
+        #endregion
+
+        #endregion
     }
 }
