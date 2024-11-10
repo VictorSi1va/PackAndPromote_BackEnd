@@ -16,5 +16,6 @@
         public int IdFaixaEtaria { get; set; }
         public int IdRegiaoAlvo { get; set; }
         public int IdPreferenciaAlvo { get; set; }
+        public int IdPlano { get; set; }
     }
 }
