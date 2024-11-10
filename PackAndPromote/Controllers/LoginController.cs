@@ -202,7 +202,8 @@ namespace PackAndPromote.Controllers
                 IdPublicoAlvo = novoUsuarioDto.IdPublicoAlvo,
                 IdFaixaEtaria = novoUsuarioDto.IdFaixaEtaria,
                 IdRegiaoAlvo = novoUsuarioDto.IdRegiaoAlvo,
-                IdPreferenciaAlvo = novoUsuarioDto.IdPreferenciaAlvo
+                IdPreferenciaAlvo = novoUsuarioDto.IdPreferenciaAlvo,
+                IdPlano = novoUsuarioDto.IdPlano
             };
 
             _dbPackAndPromote.Loja.Add(loja);
@@ -211,7 +212,7 @@ namespace PackAndPromote.Controllers
             Usuario usuario = new Usuario
             {
                 Login = novoUsuarioDto.Login,
-                Senha = novoUsuarioDto.Senha, // TODO Criptografar a senha
+                Senha = BCrypt.Net.BCrypt.HashPassword(novoUsuarioDto.Senha),
                 IdLoja = loja.IdLoja
             };
 
@@ -236,16 +237,24 @@ namespace PackAndPromote.Controllers
         [HttpPost("Entrar")]
         public IActionResult Entrar(LoginDto loginDto)
         {
-            // Verifica se o usuário existe e se a senha está correta
+            if (loginDto == null || string.IsNullOrWhiteSpace(loginDto.Login) || 
+                string.IsNullOrWhiteSpace(loginDto.Senha))
+                return BadRequest("Digite o Login e senha corretamente!");
+
+            // Verifica se o usuário existe
             var usuario = _dbPackAndPromote.Usuario
-                                           .SingleOrDefault(u => u.Login == loginDto.Login &&
-                                                                 u.Senha == loginDto.Senha);
+                                           .SingleOrDefault(u => u.Login == loginDto.Login);
 
             // Retorna erro 401 se o login ou senha estiver incorreto
             if (usuario == null)
-            {
                 return Unauthorized("Login e/ou senha inválidos.");
-            }
+
+            // Verifica se a senha digitada é igual à senha criptografada no banco
+            bool senhaValidada = BCrypt.Net.BCrypt.Verify(loginDto.Senha, usuario.Senha);
+
+            // Retorna erro 401 se a senha for diferente da senha salva no banco
+            if (!senhaValidada)
+                return Unauthorized("Login e/ou senha inválidos.");
 
             // Cria um manipulador de token JWT
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -269,8 +278,8 @@ namespace PackAndPromote.Controllers
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token); // Converte o token para string
 
-            // Retorna o token JWT gerado como resposta
-            return Ok(new { Token = tokenString });
+            // Retorna o Id do Usuário e o token JWT gerado como resposta
+            return Ok(new { Token = tokenString, IdUser = usuario.IdUsuario });
         }
         #endregion
 

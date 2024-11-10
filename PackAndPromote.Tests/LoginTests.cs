@@ -93,7 +93,8 @@ namespace PackAndPromote.Tests
                 IdPublicoAlvo = 1,
                 IdFaixaEtaria = 1,
                 IdRegiaoAlvo = 1,
-                IdPreferenciaAlvo = 1
+                IdPreferenciaAlvo = 1,
+                IdPlano = 1,
             };
 
             // Act - Chama o método CriarUsuario da controller

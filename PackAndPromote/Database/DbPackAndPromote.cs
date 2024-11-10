@@ -20,6 +20,7 @@ namespace PackAndPromote.Database
         public DbSet<PreferenciaAlvo> PreferenciaAlvo { get; set; }
         public DbSet<PublicoAlvo> PublicoAlvo { get; set; }
         public DbSet<RegiaoAlvo> RegiaoAlvo { get; set; }
+        public DbSet<Plano> Plano { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -66,6 +67,11 @@ namespace PackAndPromote.Database
                         .HasOne(u => u.PreferenciaAlvo)
                         .WithMany()
                         .HasForeignKey(u => u.IdPreferenciaAlvo);
+
+            modelBuilder.Entity<Loja>()
+                        .HasOne(u => u.Plano)
+                        .WithMany()
+                        .HasForeignKey(u => u.IdPlano);
 
             // FK da Tabela Usuario
             modelBuilder.Entity<Usuario>()

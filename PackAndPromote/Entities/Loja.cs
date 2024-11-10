@@ -47,6 +47,9 @@ namespace PackAndPromote.Entities
         [Column("IdPreferencia")]
         public int IdPreferenciaAlvo { get; set; }
 
+        [Column("IdPlano")]
+        public int IdPlano { get; set; }
+
 
         [ForeignKey("IdCategoria")]
         public Categoria Categoria { get; set; }
@@ -62,5 +65,8 @@ namespace PackAndPromote.Entities
 
         [ForeignKey("IdPreferenciaAlvo")]
         public PreferenciaAlvo PreferenciaAlvo { get; set; }
+
+        [ForeignKey("IdPlano")]
+        public Plano Plano { get; set; }
     }
 }
