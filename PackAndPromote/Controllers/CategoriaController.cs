@@ -30,7 +30,7 @@ namespace PackAndPromote.Controllers
             // Recupera todas as categorias do banco de dados.
             var categorias = _dbPackAndPromote.Categoria.ToList();
 
-            // Retorna uma resposta HTTP 200 (OK) com a lista de categorias.
+            // Retorna uma resposta HTTP 200 (OK) com a lista de categorias. 
             return Ok(categorias);
         }
         #endregion
