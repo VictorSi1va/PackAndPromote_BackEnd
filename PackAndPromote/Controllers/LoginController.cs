@@ -383,7 +383,7 @@ namespace PackAndPromote.Controllers
             _dbPackAndPromote.SaveChanges();
 
             // Retorna um status 200 OK com uma mensagem de sucesso
-            return Ok("Usuário excluído com êxito!");
+            return Ok("Usuário excluído com sucesso!");
         }
         #endregion
 
