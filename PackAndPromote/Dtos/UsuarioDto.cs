@@ -12,10 +12,11 @@
         public string CNPJLoja { get; set; }
         public string EmailLoja { get; set; }
         public int IdCategoria { get; set; }
-        public int IdPublicoAlvo { get; set; }
-        public int IdFaixaEtaria { get; set; }
-        public int IdRegiaoAlvo { get; set; }
-        public int IdPreferenciaAlvo { get; set; }
         public int IdPlano { get; set; }
+
+        public List<int> PublicoAlvo { get; set; }
+        public List<int> FaixaEtaria { get; set; }
+        public List<int> RegiaoAlvo { get; set; }
+        public List<int> PreferenciaAlvo { get; set; }
     }
 }
