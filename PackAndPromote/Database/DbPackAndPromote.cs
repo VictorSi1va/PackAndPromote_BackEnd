@@ -16,6 +16,12 @@ namespace PackAndPromote.Database
         public DbSet<Categoria> Categoria { get; set; }
         public DbSet<FaixaEtaria> FaixaEtaria { get; set; }
         public DbSet<Loja> Loja { get; set; }
+        public DbSet<LojaCategoria> LojaCategoria { get; set; }
+        public DbSet<LojaFaixaEtaria> LojaFaixaEtaria { get; set; }
+        public DbSet<LojaPlano> LojaPlano { get; set; }
+        public DbSet<LojaPreferenciaAlvo> LojaPreferenciaAlvo { get; set; }
+        public DbSet<LojaPublicoAlvo> LojaPublicoAlvo { get; set; }
+        public DbSet<LojaRegiaoAlvo> LojaRegiaoAlvo { get; set; }
         public DbSet<PedidoEmbalagem> PedidoEmbalagem { get; set; }
         public DbSet<PreferenciaAlvo> PreferenciaAlvo { get; set; }
         public DbSet<PublicoAlvo> PublicoAlvo { get; set; }
@@ -42,36 +48,71 @@ namespace PackAndPromote.Database
                         .WithMany()
                         .HasForeignKey(u => u.IdLojaEmbalagem);
 
-            // FKs da Tabela Loja
-            modelBuilder.Entity<Loja>()
+            // FKs da Tabela Loja Categoria
+            modelBuilder.Entity<LojaCategoria>()
+                        .HasOne(u => u.Loja)
+                        .WithMany()
+                        .HasForeignKey(u => u.IdLoja);
+
+            modelBuilder.Entity<LojaCategoria>()
                         .HasOne(u => u.Categoria)
                         .WithMany()
                         .HasForeignKey(u => u.IdCategoria);
 
-            modelBuilder.Entity<Loja>()
-                        .HasOne(u => u.PublicoAlvo)
+            // FKs da Tabela Loja Faixa Etaria
+            modelBuilder.Entity<LojaFaixaEtaria>()
+                        .HasOne(u => u.Loja)
                         .WithMany()
-                        .HasForeignKey(u => u.IdPublicoAlvo);
+                        .HasForeignKey(u => u.IdLoja);
 
-            modelBuilder.Entity<Loja>()
+            modelBuilder.Entity<LojaFaixaEtaria>()
                         .HasOne(u => u.FaixaEtaria)
                         .WithMany()
                         .HasForeignKey(u => u.IdFaixaEtaria);
 
-            modelBuilder.Entity<Loja>()
-                        .HasOne(u => u.RegiaoAlvo)
+            // FKs da Tabela Loja Plano
+            modelBuilder.Entity<LojaPlano>()
+                        .HasOne(u => u.Loja)
                         .WithMany()
-                        .HasForeignKey(u => u.IdRegiaoAlvo);
+                        .HasForeignKey(u => u.IdLoja);
 
-            modelBuilder.Entity<Loja>()
+            modelBuilder.Entity<LojaPlano>()
+                        .HasOne(u => u.Plano)
+                        .WithMany()
+                        .HasForeignKey(u => u.IdPlano);
+
+            // FKs da Tabela Loja Preferencia Alvo
+            modelBuilder.Entity<LojaPreferenciaAlvo>()
+                        .HasOne(u => u.Loja)
+                        .WithMany()
+                        .HasForeignKey(u => u.IdLoja);
+
+            modelBuilder.Entity<LojaPreferenciaAlvo>()
                         .HasOne(u => u.PreferenciaAlvo)
                         .WithMany()
                         .HasForeignKey(u => u.IdPreferenciaAlvo);
 
-            modelBuilder.Entity<Loja>()
-                        .HasOne(u => u.Plano)
+            // FKs da Tabela Loja Publico Alvo
+            modelBuilder.Entity<LojaPublicoAlvo>()
+                        .HasOne(u => u.Loja)
                         .WithMany()
-                        .HasForeignKey(u => u.IdPlano);
+                        .HasForeignKey(u => u.IdLoja);
+
+            modelBuilder.Entity<LojaPublicoAlvo>()
+                        .HasOne(u => u.PublicoAlvo)
+                        .WithMany()
+                        .HasForeignKey(u => u.IdPublicoAlvo);
+
+            // FKs da Tabela Loja Regiao Alvo
+            modelBuilder.Entity<LojaRegiaoAlvo>()
+                        .HasOne(u => u.Loja)
+                        .WithMany()
+                        .HasForeignKey(u => u.IdLoja);
+
+            modelBuilder.Entity<LojaRegiaoAlvo>()
+                        .HasOne(u => u.RegiaoAlvo)
+                        .WithMany()
+                        .HasForeignKey(u => u.IdRegiaoAlvo);
 
             // FK da Tabela Usuario
             modelBuilder.Entity<Usuario>()

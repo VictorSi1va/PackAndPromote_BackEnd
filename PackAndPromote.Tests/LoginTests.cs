@@ -90,11 +90,12 @@ namespace PackAndPromote.Tests
                 CNPJLoja = "00.000.000/0001-00",
                 EmailLoja = "email@loja.com",
                 IdCategoria = 1,
-                IdPublicoAlvo = 1,
-                IdFaixaEtaria = 1,
-                IdRegiaoAlvo = 1,
-                IdPreferenciaAlvo = 1,
                 IdPlano = 1,
+
+                PublicoAlvo = new List<int> { 1 },
+                FaixaEtaria = new List<int> { 1 },
+                RegiaoAlvo = new List<int> { 1 },
+                PreferenciaAlvo = new List<int> { 1 },
             };
 
             // Act - Chama o método CriarUsuario da controller

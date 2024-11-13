@@ -31,42 +31,5 @@ namespace PackAndPromote.Entities
 
         [Column("DataCriacao")]
         public DateTime DataCriacao { get; set; }
-
-        [Column("IdCategoria")]
-        public int IdCategoria { get; set; }
-
-        [Column("IdPublicoAlvo")]
-        public int IdPublicoAlvo { get; set; }
-
-        [Column("IdFaixaEtaria")]
-        public int IdFaixaEtaria { get; set; }
-
-        [Column("IdRegiaoAlvo")]
-        public int IdRegiaoAlvo { get; set; }
-
-        [Column("IdPreferencia")]
-        public int IdPreferenciaAlvo { get; set; }
-
-        [Column("IdPlano")]
-        public int IdPlano { get; set; }
-
-
-        [ForeignKey("IdCategoria")]
-        public Categoria Categoria { get; set; }
-
-        [ForeignKey("IdPublicoAlvo")]
-        public PublicoAlvo PublicoAlvo { get; set; }
-
-        [ForeignKey("IdFaixaEtaria")]
-        public FaixaEtaria FaixaEtaria { get; set; }
-
-        [ForeignKey("IdRegiaoAlvo")]
-        public RegiaoAlvo RegiaoAlvo { get; set; }
-
-        [ForeignKey("IdPreferenciaAlvo")]
-        public PreferenciaAlvo PreferenciaAlvo { get; set; }
-
-        [ForeignKey("IdPlano")]
-        public Plano Plano { get; set; }
     }
 }

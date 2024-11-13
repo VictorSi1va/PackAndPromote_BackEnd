@@ -198,15 +198,63 @@ namespace PackAndPromote.Controllers
                 CNPJLoja = novoUsuarioDto.CNPJLoja,
                 EmailLoja = novoUsuarioDto.EmailLoja,
                 DataCriacao = DateTime.Now,
-                IdCategoria = novoUsuarioDto.IdCategoria,
-                IdPublicoAlvo = novoUsuarioDto.IdPublicoAlvo,
-                IdFaixaEtaria = novoUsuarioDto.IdFaixaEtaria,
-                IdRegiaoAlvo = novoUsuarioDto.IdRegiaoAlvo,
-                IdPreferenciaAlvo = novoUsuarioDto.IdPreferenciaAlvo,
-                IdPlano = novoUsuarioDto.IdPlano
             };
-
             _dbPackAndPromote.Loja.Add(loja);
+            _dbPackAndPromote.SaveChanges();
+
+            var lojaCategoria = new LojaCategoria()
+            {
+                IdLoja = loja.IdLoja,
+                IdCategoria = novoUsuarioDto.IdCategoria,
+            };
+            _dbPackAndPromote.LojaCategoria.Add(lojaCategoria);
+
+            var lojaPlano = new LojaPlano()
+            {
+                IdLoja = loja.IdLoja,
+                IdPlano = novoUsuarioDto.IdPlano,
+            };
+            _dbPackAndPromote.LojaPlano.Add(lojaPlano);
+
+            foreach (int itemFaixaEtaria in novoUsuarioDto.FaixaEtaria)
+            {
+                var lojaFaixaEtaria = new LojaFaixaEtaria()
+                {
+                    IdLoja = loja.IdLoja,
+                    IdFaixaEtaria = itemFaixaEtaria,
+                };
+                _dbPackAndPromote.LojaFaixaEtaria.Add(lojaFaixaEtaria);
+            }
+
+            foreach (int itemPreferenciaAlvo in novoUsuarioDto.PreferenciaAlvo)
+            {
+                var lojaPreferenciaAlvo = new LojaPreferenciaAlvo()
+                {
+                    IdLoja = loja.IdLoja,
+                    IdPreferenciaAlvo = itemPreferenciaAlvo,
+                };
+                _dbPackAndPromote.LojaPreferenciaAlvo.Add(lojaPreferenciaAlvo);
+            }
+
+            foreach (int itemPublicoAlvo in novoUsuarioDto.PublicoAlvo)
+            {
+                var lojaPublicoAlvo = new LojaPublicoAlvo()
+                {
+                    IdLoja = loja.IdLoja,
+                    IdPublicoAlvo = itemPublicoAlvo,
+                };
+                _dbPackAndPromote.LojaPublicoAlvo.Add(lojaPublicoAlvo);
+            }
+
+            foreach (int itemRegiaoAlvo in novoUsuarioDto.RegiaoAlvo)
+            {
+                var lojaRegiaoAlvo = new LojaRegiaoAlvo()
+                {
+                    IdLoja = loja.IdLoja,
+                    IdRegiaoAlvo = itemRegiaoAlvo,
+                };
+                _dbPackAndPromote.LojaRegiaoAlvo.Add(lojaRegiaoAlvo);
+            }
             _dbPackAndPromote.SaveChanges();
 
             Usuario usuario = new Usuario
@@ -215,7 +263,6 @@ namespace PackAndPromote.Controllers
                 Senha = BCrypt.Net.BCrypt.HashPassword(novoUsuarioDto.Senha),
                 IdLoja = loja.IdLoja
             };
-
             _dbPackAndPromote.Usuario.Add(usuario);
             _dbPackAndPromote.SaveChanges();
 
@@ -224,7 +271,6 @@ namespace PackAndPromote.Controllers
                 IdUsuario = usuario.IdUsuario,
                 IdPerfil = 2 // Perfil Cliente
             };
-
             _dbPackAndPromote.UsuarioPerfil.Add(usuarioPerfil);
             _dbPackAndPromote.SaveChanges();
 
@@ -334,12 +380,13 @@ namespace PackAndPromote.Controllers
                 loja.CNPJLoja = usuarioAlteradoDto.CNPJLoja;
                 loja.EmailLoja = usuarioAlteradoDto.EmailLoja;
 
-                // Atualiza as informações adicionais da loja
-                loja.IdCategoria = usuarioAlteradoDto.IdCategoria;
-                loja.IdPublicoAlvo = usuarioAlteradoDto.IdPublicoAlvo;
-                loja.IdFaixaEtaria = usuarioAlteradoDto.IdFaixaEtaria;
-                loja.IdRegiaoAlvo = usuarioAlteradoDto.IdRegiaoAlvo;
-                loja.IdPreferenciaAlvo = usuarioAlteradoDto.IdPreferenciaAlvo;
+                // Atualizar as informações adicionais da loja
+                //loja.IdCategoria = usuarioAlteradoDto.IdCategoria;
+                //loja.IdCategoria = usuarioAlteradoDto.IdPlano;
+                //loja.IdPublicoAlvo = usuarioAlteradoDto.IdPublicoAlvo;
+                //loja.IdFaixaEtaria = usuarioAlteradoDto.IdFaixaEtaria;
+                //loja.IdRegiaoAlvo = usuarioAlteradoDto.IdRegiaoAlvo;
+                //loja.IdPreferenciaAlvo = usuarioAlteradoDto.IdPreferenciaAlvo;
             }
 
             // Salva as alterações no banco de dados
