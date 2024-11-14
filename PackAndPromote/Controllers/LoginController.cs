@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PackAndPromote.Database;
 using PackAndPromote.Dtos;
@@ -182,6 +183,95 @@ namespace PackAndPromote.Controllers
             };
 
             return user;
+        }
+        #endregion
+
+        #region Pesquisar Usuário por Id
+        [Authorize] // Requer autorização para acessar este endpoint
+        [HttpGet("PesquisarDadosMinhaConta/{id}")]
+        public ActionResult<UsuarioMinhaContaDto> PesquisarDadosMinhaConta(int id)
+        {
+            var usuario = _dbPackAndPromote.Usuario.Find(id);
+
+            if (usuario == null)
+                return NotFound();
+
+            var loja = _dbPackAndPromote.Loja.Find(usuario.IdLoja);
+
+            if (loja == null)
+                return NotFound();
+
+            var lojaCategoria = _dbPackAndPromote.LojaCategoria
+                                                 .Where(xs => xs.IdLoja == usuario.IdLoja)
+                                                 .FirstOrDefault();
+
+            if (lojaCategoria == null)
+                return NotFound();
+
+            var lojaPlano = _dbPackAndPromote.LojaPlano
+                                             .Include(xs => xs.Plano)
+                                             .Where(xs => xs.IdLoja == usuario.IdLoja)
+                                             .FirstOrDefault();
+
+            if (lojaPlano == null)
+                return NotFound();
+
+            List<int> lojaPublicoAlvo = _dbPackAndPromote.LojaPublicoAlvo
+                                                   .Where(xs => xs.IdLoja == usuario.IdLoja)
+                                                   .Select(x => x.IdPublicoAlvo)
+                                                   .ToList();
+
+            if (lojaPublicoAlvo == null)
+                return NotFound();
+
+            List<int> lojaFaixaEtaria = _dbPackAndPromote.LojaFaixaEtaria
+                                                   .Where(xs => xs.IdLoja == usuario.IdLoja)
+                                                   .Select(x => x.IdFaixaEtaria)
+                                                   .ToList();
+
+            if (lojaFaixaEtaria == null)
+                return NotFound();
+
+            List<int> lojaRegiaoAlvo = _dbPackAndPromote.LojaRegiaoAlvo
+                                                  .Where(xs => xs.IdLoja == usuario.IdLoja)
+                                                  .Select(x => x.IdRegiaoAlvo)
+                                                  .ToList();
+
+            if (lojaRegiaoAlvo == null)
+                return NotFound();
+
+            List<int> lojaPreferenciaAlvo = _dbPackAndPromote.LojaPreferenciaAlvo
+                                                       .Where(xs => xs.IdLoja == usuario.IdLoja)
+                                                       .Select(x => x.IdPreferenciaAlvo)
+                                                       .ToList();
+
+            if (lojaPreferenciaAlvo == null)
+                return NotFound();
+
+            UsuarioMinhaContaDto retorno = new UsuarioMinhaContaDto
+            {
+                NomeLoja = loja.NomeLoja,
+                CNPJLoja = loja.CNPJLoja,
+                EnderecoLoja = loja.EnderecoLoja,
+                TelefoneLoja = loja.TelefoneLoja,
+                EmailLoja = loja.EmailLoja,
+                DescricaoLoja = loja.DescricaoLoja,
+
+                IdCategoria = lojaCategoria.IdCategoria,
+                PublicoAlvo = lojaPublicoAlvo,
+                FaixaEtaria = lojaFaixaEtaria,
+                RegiaoAlvo = lojaRegiaoAlvo,
+                PreferenciaAlvo = lojaPreferenciaAlvo,
+
+                IdPlano = lojaPlano.IdPlano,
+                NomePlano = lojaPlano.Plano.NomePlano,
+                MediaMensalEmbalagensEntreguesPlano = 8750, // TODO Buscar da tabela
+                MediaDiariaEmbalagensEntreguesPlano = 25, // TODO Buscar da tabela
+                ProximaRenovacaoPlano = "19/12/2024", // TODO Buscar da tabela
+                PeriodoPlano = "Mensal" // TODO Buscar da tabela
+            };
+
+            return retorno;
         }
         #endregion
 
