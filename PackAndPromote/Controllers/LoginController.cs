@@ -8,6 +8,7 @@ using PackAndPromote.Entities;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace PackAndPromote.Controllers
 {
@@ -279,6 +280,54 @@ namespace PackAndPromote.Controllers
         [HttpPost("CriarUsuario")]
         public ActionResult<Usuario> CriarUsuario(UsuarioDto novoUsuarioDto)
         {
+            // Validação dos dados de entrada
+            if (novoUsuarioDto == null)
+                return BadRequest("Os dados do usuário não podem ser nulos.");
+
+            // Validações de campos obrigatórios
+            if (string.IsNullOrEmpty(novoUsuarioDto.NomeLoja))
+                return BadRequest("O nome da loja é obrigatório.");
+
+            if (string.IsNullOrEmpty(novoUsuarioDto.EnderecoLoja))
+                return BadRequest("O endereço da loja é obrigatório.");
+
+            if (string.IsNullOrEmpty(novoUsuarioDto.TelefoneLoja))
+                return BadRequest("O telefone da loja é obrigatório.");
+
+            if (string.IsNullOrEmpty(novoUsuarioDto.CNPJLoja))
+                return BadRequest("O CNPJ da loja é obrigatório.");
+
+            // Validação de formato do CNPJ (apenas um exemplo simples)
+            if (!IsValidCNPJ(novoUsuarioDto.CNPJLoja))
+                return BadRequest("O CNPJ da loja é inválido.");
+
+            if (string.IsNullOrEmpty(novoUsuarioDto.EmailLoja) || !IsValidEmail(novoUsuarioDto.EmailLoja))
+                return BadRequest("O email da loja é inválido.");
+
+            if (novoUsuarioDto.IdCategoria == 0)
+                return BadRequest("A categoria da loja deve ser informada.");
+
+            if (novoUsuarioDto.IdPlano == 0)
+                return BadRequest("O plano da loja deve ser informado.");
+
+            // Validação de listas: FaixaEtaria, PreferenciaAlvo, PublicoAlvo, RegiaoAlvo
+            if (novoUsuarioDto.FaixaEtaria == null || !novoUsuarioDto.FaixaEtaria.Any())
+                return BadRequest("É necessário selecionar pelo menos uma faixa etária.");
+
+            if (novoUsuarioDto.PreferenciaAlvo == null || !novoUsuarioDto.PreferenciaAlvo.Any())
+                return BadRequest("É necessário selecionar pelo menos uma preferencia alvo.");
+
+            if (novoUsuarioDto.PublicoAlvo == null || !novoUsuarioDto.PublicoAlvo.Any())
+                return BadRequest("É necessário selecionar pelo menos um público alvo.");
+
+            if (novoUsuarioDto.RegiaoAlvo == null || !novoUsuarioDto.RegiaoAlvo.Any())
+                return BadRequest("É necessário selecionar pelo menos uma região alvo.");
+
+            // Verifica se já existe um usuário com o mesmo Login
+            if (_dbPackAndPromote.Usuario.Any(u => u.Login == novoUsuarioDto.Login))
+                return BadRequest("Já existe um usuário com esse login.");
+
+            // Criação da loja
             var loja = new Loja()
             {
                 NomeLoja = novoUsuarioDto.NomeLoja,
@@ -289,9 +338,15 @@ namespace PackAndPromote.Controllers
                 EmailLoja = novoUsuarioDto.EmailLoja,
                 DataCriacao = DateTime.Now,
             };
+
+            // Verifica se a loja com o mesmo CNPJ já existe
+            if (_dbPackAndPromote.Loja.Any(l => l.CNPJLoja == novoUsuarioDto.CNPJLoja))
+                return BadRequest("Já existe uma loja com este CNPJ.");
+
             _dbPackAndPromote.Loja.Add(loja);
             _dbPackAndPromote.SaveChanges();
 
+            // Criação das associações
             var lojaCategoria = new LojaCategoria()
             {
                 IdLoja = loja.IdLoja,
@@ -306,6 +361,7 @@ namespace PackAndPromote.Controllers
             };
             _dbPackAndPromote.LojaPlano.Add(lojaPlano);
 
+            // Adiciona faixas etárias
             foreach (int itemFaixaEtaria in novoUsuarioDto.FaixaEtaria)
             {
                 var lojaFaixaEtaria = new LojaFaixaEtaria()
@@ -316,6 +372,7 @@ namespace PackAndPromote.Controllers
                 _dbPackAndPromote.LojaFaixaEtaria.Add(lojaFaixaEtaria);
             }
 
+            // Adiciona preferências alvo
             foreach (int itemPreferenciaAlvo in novoUsuarioDto.PreferenciaAlvo)
             {
                 var lojaPreferenciaAlvo = new LojaPreferenciaAlvo()
@@ -326,6 +383,7 @@ namespace PackAndPromote.Controllers
                 _dbPackAndPromote.LojaPreferenciaAlvo.Add(lojaPreferenciaAlvo);
             }
 
+            // Adiciona públicos alvo
             foreach (int itemPublicoAlvo in novoUsuarioDto.PublicoAlvo)
             {
                 var lojaPublicoAlvo = new LojaPublicoAlvo()
@@ -336,6 +394,7 @@ namespace PackAndPromote.Controllers
                 _dbPackAndPromote.LojaPublicoAlvo.Add(lojaPublicoAlvo);
             }
 
+            // Adiciona regiões alvo
             foreach (int itemRegiaoAlvo in novoUsuarioDto.RegiaoAlvo)
             {
                 var lojaRegiaoAlvo = new LojaRegiaoAlvo()
@@ -345,7 +404,15 @@ namespace PackAndPromote.Controllers
                 };
                 _dbPackAndPromote.LojaRegiaoAlvo.Add(lojaRegiaoAlvo);
             }
+
             _dbPackAndPromote.SaveChanges();
+
+            // Criação do usuário
+            if (string.IsNullOrEmpty(novoUsuarioDto.Login))
+                return BadRequest("O login do usuário é obrigatório.");
+
+            if (string.IsNullOrEmpty(novoUsuarioDto.Senha))
+                return BadRequest("A senha do usuário é obrigatória.");
 
             Usuario usuario = new Usuario
             {
@@ -353,9 +420,11 @@ namespace PackAndPromote.Controllers
                 Senha = BCrypt.Net.BCrypt.HashPassword(novoUsuarioDto.Senha),
                 IdLoja = loja.IdLoja
             };
+
             _dbPackAndPromote.Usuario.Add(usuario);
             _dbPackAndPromote.SaveChanges();
 
+            // Adiciona perfil padrão para o usuário
             var usuarioPerfil = new UsuarioPerfil()
             {
                 IdUsuario = usuario.IdUsuario,
@@ -373,7 +442,7 @@ namespace PackAndPromote.Controllers
         [HttpPost("Entrar")]
         public IActionResult Entrar(LoginDto loginDto)
         {
-            if (loginDto == null || string.IsNullOrWhiteSpace(loginDto.Login) || 
+            if (loginDto == null || string.IsNullOrWhiteSpace(loginDto.Login) ||
                 string.IsNullOrWhiteSpace(loginDto.Senha))
                 return BadRequest("Digite o Login e senha corretamente!");
 
@@ -526,6 +595,19 @@ namespace PackAndPromote.Controllers
 
         #endregion
 
+        #endregion
+
+        #region Utils
+        // Funções auxiliares para validações de CNPJ e Email
+        private bool IsValidCNPJ(string cnpj)
+        {
+            return Regex.IsMatch(cnpj, @"^\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}$");
+        }
+
+        private bool IsValidEmail(string email)
+        {
+            return Regex.IsMatch(email, @"^[^@]+@[^@]+\.[^@]+$");
+        }
         #endregion
     }
 }
