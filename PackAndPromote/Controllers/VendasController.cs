@@ -51,10 +51,71 @@ namespace PackAndPromote.Controllers
         }
         #endregion
 
+        #region Listar Novas Parcerias
+        [Authorize]
+        [HttpGet("ListarNovasParcerias/{id}")]
+        public ActionResult<IEnumerable<ParceriaCardDto>> ListarNovasParcerias(int id)
+        {
+            var lojas = _dbPackAndPromote.Loja
+                                         .Where(xs => xs.IdLoja != id)
+                                         .Take(7)
+                                         .Select(xs => new ParceriaCardDto
+                                         {
+                                             IdLoja = xs.IdLoja,
+                                             NomeLoja = xs.NomeLoja,
+                                             IdImagemLoja = 1, // TODO Pegar da Imagem salva no BD
+                                         })
+                                         .ToList();
+
+            return Ok(lojas);
+        }
+        #endregion
+
+        #region Listar Parcerias Atuais
+        [Authorize]
+        [HttpGet("ListarParceriasAtuais/{id}")]
+        public ActionResult<IEnumerable<ParceriaCardDto>> ListarParceriasAtuais(int id)
+        {
+            var lojas = _dbPackAndPromote.Loja
+                                         .Where(xs => xs.IdLoja != id)
+                                         .Take(7)
+                                         .Select(xs => new ParceriaCardDto
+                                         {
+                                             IdLoja = xs.IdLoja,
+                                             NomeLoja = xs.NomeLoja,
+                                             IdImagemLoja = 1, // TODO Pegar da Imagem salva no BD
+                                         })
+                                         .ToList();
+
+            return Ok(lojas);
+        }
+        #endregion
+
+        #region Listar Parcerias Solicitadas
+        [Authorize]
+        [HttpGet("ListarParceriasSolicitadas/{id}")]
+        public ActionResult<IEnumerable<ParceriaCardDto>> ListarParceriasSolicitadas(int id)
+        {
+            var lojas = _dbPackAndPromote.Loja
+                                         .Where(xs => xs.IdLoja != id)
+                                         .Take(7)
+                                         .Select(xs => new ParceriaCardDto
+                                         {
+                                             IdLoja = xs.IdLoja,
+                                             NomeLoja = xs.NomeLoja,
+                                             IdImagemLoja = 1, // TODO Pegar da Imagem salva no BD
+                                         })
+                                         .ToList();
+
+            return Ok(lojas);
+        }
+        #endregion
+
         #region Pesquisar Loja por Id
         // Endpoint para pesquisar uma loja pelo ID
+        [Authorize]
         [HttpGet("PesquisarLoja/{id}")]
-        public ActionResult<LojaDto> PesquisarLoja(int id)
+        public ActionResult<DetalhesLojaDto> PesquisarLoja(int id)
         {
             // Busca a loja pelo ID no banco de dados
             var loja = _dbPackAndPromote.Loja.Find(id);
@@ -64,21 +125,81 @@ namespace PackAndPromote.Controllers
                 return NotFound();
 
             // Cria um objeto LojaDto a partir da loja encontrada
-            LojaDto lojaPesquisada = new LojaDto
+            DetalhesLojaDto lojaPesquisada = new DetalhesLojaDto
             {
                 IdLoja = loja.IdLoja,
                 NomeLoja = loja.NomeLoja,
                 EnderecoLoja = loja.EnderecoLoja,
-                DescricaoLoja = loja.DescricaoLoja,
                 TelefoneLoja = loja.TelefoneLoja,
-                CNPJLoja = loja.CNPJLoja,
                 EmailLoja = loja.EmailLoja,
-                DataCriacao = loja.DataCriacao,
+                DescricaoLoja = loja.DescricaoLoja,
+                IdImagemLoja = 1 // TODO Pegar da Imagem salva no BD
             };
+
+            var lojaPublicoAlvo = _dbPackAndPromote.LojaPublicoAlvo
+                                                .Where(xs => xs.IdLoja == loja.IdLoja)
+                                                .Include(xs => xs.PublicoAlvo)
+                                                .ToList();
+
+            // Adiciona os Públicos-Alvo à lojaPesquisada sem vírgula extra
+            for (int i = 0; i < lojaPublicoAlvo.Count; i++)
+            {
+                lojaPesquisada.PublicoAlvoLoja += lojaPublicoAlvo[i].PublicoAlvo.DescricaoPublicoAlvo;
+                if (i < lojaPublicoAlvo.Count - 1) // Se não for o último item
+                {
+                    lojaPesquisada.PublicoAlvoLoja += ", ";
+                }
+            }
+
+            var lojaFaixaEtaria = _dbPackAndPromote.LojaFaixaEtaria
+                                    .Where(xs => xs.IdLoja == loja.IdLoja)
+                                    .Include(xs => xs.FaixaEtaria)
+                                    .ToList();
+
+            // Adiciona as Faixas Etárias à lojaPesquisada sem vírgula extra
+            for (int i = 0; i < lojaFaixaEtaria.Count; i++)
+            {
+                lojaPesquisada.FaixaEtariaLoja += lojaFaixaEtaria[i].FaixaEtaria.DescricaoFaixaEtaria;
+                if (i < lojaFaixaEtaria.Count - 1) // Se não for o último item
+                {
+                    lojaPesquisada.FaixaEtariaLoja += ", ";
+                }
+            }
+
+            var lojaRegiaoAlvo = _dbPackAndPromote.LojaRegiaoAlvo
+                                                    .Where(xs => xs.IdLoja == loja.IdLoja)
+                                                    .Include(xs => xs.RegiaoAlvo)
+                                                    .ToList();
+
+            // Adiciona as Regiões-Alvo à lojaPesquisada sem vírgula extra
+            for (int i = 0; i < lojaRegiaoAlvo.Count; i++)
+            {
+                lojaPesquisada.RegiaoLoja += lojaRegiaoAlvo[i].RegiaoAlvo.NomeRegiaoAlvo;
+                if (i < lojaRegiaoAlvo.Count - 1) // Se não for o último item
+                {
+                    lojaPesquisada.RegiaoLoja += ", ";
+                }
+            }
+
+            var lojaPreferenciaAlvo = _dbPackAndPromote.LojaPreferenciaAlvo
+                                                .Where(xs => xs.IdLoja == loja.IdLoja)
+                                                .Include(xs => xs.PreferenciaAlvo)
+                                                .ToList();
+
+            // Adiciona as Preferências-Alvo à lojaPesquisada sem vírgula extra
+            for (int i = 0; i < lojaPreferenciaAlvo.Count; i++)
+            {
+                lojaPesquisada.PreferenciaParceriasLoja += lojaPreferenciaAlvo[i].PreferenciaAlvo.DescricaoPreferenciaAlvo;
+                if (i < lojaPreferenciaAlvo.Count - 1) // Se não for o último item
+                {
+                    lojaPesquisada.PreferenciaParceriasLoja += ", ";
+                }
+            }
 
             // Retorna a loja encontrada encapsulada em um resultado Ok
             return Ok(lojaPesquisada);
         }
+
         #endregion
 
         #region Alterar Loja
