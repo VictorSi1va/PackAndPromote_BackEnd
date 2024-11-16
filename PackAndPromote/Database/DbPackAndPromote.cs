@@ -22,11 +22,14 @@ namespace PackAndPromote.Database
         public DbSet<LojaPreferenciaAlvo> LojaPreferenciaAlvo { get; set; }
         public DbSet<LojaPublicoAlvo> LojaPublicoAlvo { get; set; }
         public DbSet<LojaRegiaoAlvo> LojaRegiaoAlvo { get; set; }
+        public DbSet<LojaImagem> LojaImagem { get; set; }
         public DbSet<PedidoEmbalagem> PedidoEmbalagem { get; set; }
         public DbSet<PreferenciaAlvo> PreferenciaAlvo { get; set; }
         public DbSet<PublicoAlvo> PublicoAlvo { get; set; }
         public DbSet<RegiaoAlvo> RegiaoAlvo { get; set; }
         public DbSet<Plano> Plano { get; set; }
+        public DbSet<Imagem> Imagem { get; set; }
+        public DbSet<Parceria> Parceria { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -113,6 +116,28 @@ namespace PackAndPromote.Database
                         .HasOne(u => u.RegiaoAlvo)
                         .WithMany()
                         .HasForeignKey(u => u.IdRegiaoAlvo);
+
+            // FKs da Tabela Loja Imagem
+            modelBuilder.Entity<LojaImagem>()
+                        .HasOne(u => u.Loja)
+                        .WithMany()
+                        .HasForeignKey(u => u.IdLoja);
+
+            modelBuilder.Entity<LojaImagem>()
+                        .HasOne(u => u.Imagem)
+                        .WithMany()
+                        .HasForeignKey(u => u.IdImagem);
+
+            // FKs da Tabela Parceria
+            modelBuilder.Entity<Parceria>()
+                        .HasOne(u => u.LojaPioneer)
+                        .WithMany()
+                        .HasForeignKey(u => u.IdLojaPioneer);
+
+            modelBuilder.Entity<Parceria>()
+                        .HasOne(u => u.LojaPromoter)
+                        .WithMany()
+                        .HasForeignKey(u => u.IdLojaPromoter);
 
             // FK da Tabela Usuario
             modelBuilder.Entity<Usuario>()
