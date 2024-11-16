@@ -347,6 +347,13 @@ namespace PackAndPromote.Controllers
             _dbPackAndPromote.SaveChanges();
 
             // Criação das associações
+            var lojaImagem = new LojaImagem()
+            {
+                IdLoja = loja.IdLoja,
+                IdImagem = 1, // Imagem Default
+            };
+            _dbPackAndPromote.LojaImagem.Add(lojaImagem);
+
             var lojaCategoria = new LojaCategoria()
             {
                 IdLoja = loja.IdLoja,

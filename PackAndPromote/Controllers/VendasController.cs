@@ -57,15 +57,31 @@ namespace PackAndPromote.Controllers
         public ActionResult<IEnumerable<ParceriaCardDto>> ListarNovasParcerias(int id)
         {
             var lojas = _dbPackAndPromote.Loja
-                                         .Where(xs => xs.IdLoja != id)
-                                         .Take(7)
-                                         .Select(xs => new ParceriaCardDto
-                                         {
-                                             IdLoja = xs.IdLoja,
-                                             NomeLoja = xs.NomeLoja,
-                                             IdImagemLoja = 1, // TODO Pegar da Imagem salva no BD
-                                         })
-                                         .ToList();
+                                        .Where(xs => xs.IdLoja != id)
+                                        .Take(7)
+                                        .Select(xs => new ParceriaCardDto
+                                        {
+                                            IdLoja = xs.IdLoja,
+                                            NomeLoja = xs.NomeLoja,
+                                        })
+                                        .ToList();
+
+            // Filtra as lojas que NÃO possuem uma parceria onde:
+            // a loja atual (id) é a IdLojaPioneer e a loja pesquisada é a IdLojaPromoter
+            lojas = lojas
+                    .Where(loja => !_dbPackAndPromote.Parceria
+                    .Any(p => p.IdLojaPioneer == id && 
+                              p.IdLojaPromoter == loja.IdLoja))
+                    .ToList();
+
+            // Atribui a imagem da loja para cada item filtrado.
+            foreach (var loja in lojas)
+            {
+                loja.IdImagemLoja = _dbPackAndPromote.LojaImagem
+                                                    .Where(xs => xs.IdLoja == loja.IdLoja)
+                                                    .Select(xs => xs.IdImagem)
+                                                    .FirstOrDefault();
+            }
 
             return Ok(lojas);
         }
@@ -83,9 +99,25 @@ namespace PackAndPromote.Controllers
                                          {
                                              IdLoja = xs.IdLoja,
                                              NomeLoja = xs.NomeLoja,
-                                             IdImagemLoja = 1, // TODO Pegar da Imagem salva no BD
                                          })
-                                         .ToList();
+                                        .ToList();
+
+            // Filtra as lojas que possuem uma parceria com o status "EM ANDAMENTO"
+            lojas = lojas
+                    .Where(loja => _dbPackAndPromote.Parceria
+                    .Any(p => p.IdLojaPioneer == id &&
+                         p.IdLojaPromoter == loja.IdLoja &&
+                         p.StatusAtual == "EM ANDAMENTO"))
+                    .ToList();
+
+            // Atribui a imagem da loja para cada item filtrado.
+            foreach (var loja in lojas)
+            {
+                loja.IdImagemLoja = _dbPackAndPromote.LojaImagem
+                                    .Where(xs => xs.IdLoja == loja.IdLoja)
+                                    .Select(xs => xs.IdImagem)
+                                    .FirstOrDefault();
+            }
 
             return Ok(lojas);
         }
@@ -96,16 +128,33 @@ namespace PackAndPromote.Controllers
         [HttpGet("ListarParceriasSolicitadas/{id}")]
         public ActionResult<IEnumerable<ParceriaCardDto>> ListarParceriasSolicitadas(int id)
         {
+            // Obtenha a lista de lojas com as parcerias solicitadas.
             var lojas = _dbPackAndPromote.Loja
-                                         .Where(xs => xs.IdLoja != id)
-                                         .Take(7)
-                                         .Select(xs => new ParceriaCardDto
-                                         {
-                                             IdLoja = xs.IdLoja,
-                                             NomeLoja = xs.NomeLoja,
-                                             IdImagemLoja = 1, // TODO Pegar da Imagem salva no BD
-                                         })
-                                         .ToList();
+                                        .Where(xs => xs.IdLoja != id)
+                                        .Take(7)
+                                        .Select(xs => new ParceriaCardDto
+                                        {
+                                            IdLoja = xs.IdLoja,
+                                            NomeLoja = xs.NomeLoja,
+                                        })
+                                        .ToList();
+
+            // Filtra as lojas que possuem uma parceria com o status "SOLICITADO"
+            lojas = lojas
+                    .Where(loja => _dbPackAndPromote.Parceria
+                    .Any(p => p.IdLojaPioneer == id && 
+                         p.IdLojaPromoter == loja.IdLoja && 
+                         p.StatusAtual == "SOLICITADO"))
+                    .ToList();
+
+            // Atribui a imagem da loja para cada item filtrado.
+            foreach (var loja in lojas)
+            {
+                loja.IdImagemLoja = _dbPackAndPromote.LojaImagem
+                                    .Where(xs => xs.IdLoja == loja.IdLoja)
+                                    .Select(xs => xs.IdImagem)
+                                    .FirstOrDefault();
+            }
 
             return Ok(lojas);
         }
@@ -133,6 +182,10 @@ namespace PackAndPromote.Controllers
                 TelefoneLoja = loja.TelefoneLoja,
                 EmailLoja = loja.EmailLoja,
                 DescricaoLoja = loja.DescricaoLoja,
+                PublicoAlvoLoja = "",
+                FaixaEtariaLoja = "",
+                RegiaoLoja = "",
+                PreferenciaParceriasLoja = "",
                 IdImagemLoja = 1 // TODO Pegar da Imagem salva no BD
             };
 

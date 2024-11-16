@@ -91,7 +91,7 @@ namespace PackAndPromote.Tests
             // Assert: Verifica se o resultado é do tipo OkObjectResult
             var okResult = Assert.IsType<OkObjectResult>(result.Result);
             // Verifica se o valor retornado é um LojaDto
-            var loja = Assert.IsType<LojaDto>(okResult.Value);
+            var loja = Assert.IsType<DetalhesLojaDto>(okResult.Value);
             // Verifica se os dados da loja estão corretos
             Assert.Equal(22, loja.IdLoja);
             Assert.Equal("Loja A", loja.NomeLoja);
