@@ -350,7 +350,7 @@ namespace PackAndPromote.Controllers
             var lojaImagem = new LojaImagem()
             {
                 IdLoja = loja.IdLoja,
-                IdImagem = 1, // Imagem Default
+                IdImagem = 3, // Imagem Default
             };
             _dbPackAndPromote.LojaImagem.Add(lojaImagem);
 

@@ -185,9 +185,13 @@ namespace PackAndPromote.Controllers
                 PublicoAlvoLoja = "",
                 FaixaEtariaLoja = "",
                 RegiaoLoja = "",
-                PreferenciaParceriasLoja = "",
-                IdImagemLoja = 1 // TODO Pegar da Imagem salva no BD
+                PreferenciaParceriasLoja = ""
             };
+
+            lojaPesquisada.IdImagemLoja = _dbPackAndPromote.LojaImagem
+                                          .Where(xs => xs.IdLoja == loja.IdLoja)
+                                          .Select(xs => xs.IdImagem)
+                                          .FirstOrDefault();
 
             var lojaPublicoAlvo = _dbPackAndPromote.LojaPublicoAlvo
                                                 .Where(xs => xs.IdLoja == loja.IdLoja)
