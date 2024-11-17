@@ -284,6 +284,57 @@ namespace PackAndPromote.Controllers
         }
         #endregion
 
+        #region Solicitar Parceria
+        [Authorize]
+        [HttpPost("SolicitarParceria/{id}")]
+        public IActionResult SolicitarParceria(int id, ParceriaSolicitacaoDto parceriaSolicitacaoDto)
+        {
+            var exiteLojaPioneer = _dbPackAndPromote.Loja
+                                   .Any(xs => xs.IdLoja == id);
+
+            if (!exiteLojaPioneer)
+                return NotFound();
+
+            var exiteLojaPromoter = _dbPackAndPromote.Loja
+                                    .Any(xs => xs.IdLoja == parceriaSolicitacaoDto.IdLojaPromoter);
+
+            if (!exiteLojaPromoter)
+                return NotFound();
+
+            Parceria novaParceria = new Parceria()
+            {
+                IdLojaPioneer = id,
+                IdLojaPromoter = parceriaSolicitacaoDto.IdLojaPromoter,
+                StatusAtual = "SOLICITADO"
+            };
+
+            _dbPackAndPromote.Parceria.Add(novaParceria);
+            _dbPackAndPromote.SaveChanges();
+
+            return Ok("Parceria solicitada com sucesso!");
+        }
+        #endregion
+
+        #region Cancelar Parceria
+        [Authorize]
+        [HttpDelete("CancelarParceria/{id}")]
+        public IActionResult CancelarParceria(int id, ParceriaCancelamentoDto parceriaCancelamentoDto)
+        {
+            var parceria = _dbPackAndPromote.Parceria
+                           .Where(xs => xs.IdLojaPioneer == id &&
+                                  xs.IdLojaPromoter == parceriaCancelamentoDto.IdLojaPromoter)
+                           .FirstOrDefault();
+
+            if (parceria == null)
+                return NotFound();
+
+            _dbPackAndPromote.Parceria.Remove(parceria);
+            _dbPackAndPromote.SaveChanges();
+
+            return Ok("Parceria cancelada com sucesso!");
+        }
+        #endregion
+
         #region Listar Pedidos Embalagem
         // Endpoint para listar todos os pedidos de embalagem
         [Authorize]
