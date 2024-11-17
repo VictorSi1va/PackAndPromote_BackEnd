@@ -293,18 +293,27 @@ namespace PackAndPromote.Controllers
                                    .Any(xs => xs.IdLoja == id);
 
             if (!exiteLojaPioneer)
-                return NotFound();
+                return NotFound("Loja solicitante não encontrada.");
 
             var exiteLojaPromoter = _dbPackAndPromote.Loja
                                     .Any(xs => xs.IdLoja == parceriaSolicitacaoDto.IdLojaPromoter);
 
             if (!exiteLojaPromoter)
-                return NotFound();
+                return NotFound("Loja parceira não encontrada.");
+
+            // Verifica se já existe uma parceria entre as lojas
+            var existeParceria = _dbPackAndPromote.Parceria
+                                 .Any(p => p.IdLojaPioneer == id && 
+                                 p.IdLojaPromoter == parceriaSolicitacaoDto.IdLojaPromoter);
+
+            if (existeParceria)
+                return Conflict("Já existe uma parceria entre as duas lojas.");
 
             Parceria novaParceria = new Parceria()
             {
                 IdLojaPioneer = id,
                 IdLojaPromoter = parceriaSolicitacaoDto.IdLojaPromoter,
+                IdLojaPacker = null,
                 StatusAtual = "SOLICITADO"
             };
 
@@ -326,7 +335,7 @@ namespace PackAndPromote.Controllers
                            .FirstOrDefault();
 
             if (parceria == null)
-                return NotFound();
+                return NotFound("Não foi possível encontrar a parceria entre as lojas.");
 
             _dbPackAndPromote.Parceria.Remove(parceria);
             _dbPackAndPromote.SaveChanges();

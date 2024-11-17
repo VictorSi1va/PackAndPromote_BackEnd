@@ -15,7 +15,7 @@ namespace PackAndPromote.Entities
         public int IdLojaPioneer { get; set; }
 
         [Column("IdLojaPacker")]
-        public int IdLojaPacker { get; set; }
+        public int? IdLojaPacker { get; set; }
 
         [Column("IdLojaPromoter")]
         public int IdLojaPromoter { get; set; }
