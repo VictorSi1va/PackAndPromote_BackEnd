@@ -160,6 +160,43 @@ namespace PackAndPromote.Controllers
         }
         #endregion
 
+        #region Listar Parcerias Com Solicitações Pendentes
+        [Authorize]
+        [HttpGet("ListarParceriasComSolicitacoesPendentes/{id}")]
+        public ActionResult<IEnumerable<ParceriaCardDto>> ListarParceriasComSolicitacoesPendentes(int id)
+        {
+            // Obtenha a lista de lojas com as parcerias solicitadas.
+            var lojas = _dbPackAndPromote.Loja
+                                         .Where(xs => xs.IdLoja != id)
+                                         .Take(7)
+                                         .Select(xs => new ParceriaCardDto
+                                         {
+                                             IdLoja = xs.IdLoja,
+                                             NomeLoja = xs.NomeLoja,
+                                         })
+                                         .ToList();
+
+            // Filtra as lojas que possuem uma parceria com o status "SOLICITADO"
+            lojas = lojas
+                    .Where(loja => _dbPackAndPromote.Parceria
+                    .Any(p => p.IdLojaPioneer == loja.IdLoja &&
+                         p.IdLojaPromoter == id &&
+                         p.StatusAtual == "SOLICITADO"))
+                    .ToList();
+
+            // Atribui a imagem da loja para cada item filtrado.
+            foreach (var loja in lojas)
+            {
+                loja.IdImagemLoja = _dbPackAndPromote.LojaImagem
+                                    .Where(xs => xs.IdLoja == loja.IdLoja)
+                                    .Select(xs => xs.IdImagem)
+                                    .FirstOrDefault();
+            }
+
+            return Ok(lojas);
+        }
+        #endregion
+
         #region Pesquisar Loja por Id
         // Endpoint para pesquisar uma loja pelo ID
         [Authorize]
@@ -325,6 +362,28 @@ namespace PackAndPromote.Controllers
             _dbPackAndPromote.SaveChanges();
 
             return Ok("Parceria solicitada com sucesso!");
+        }
+        #endregion
+
+        #region Aprovar Parceria
+        [Authorize]
+        [HttpPost("AprovarParceria/{id}")]
+        public IActionResult AprovarParceria(int id, ParceriaAprovacaoDto parceriaAprovacaoDto)
+        {
+            var parceria = _dbPackAndPromote.Parceria
+                           .Where(xs => xs.IdLojaPromoter == id &&
+                                  xs.IdLojaPioneer == parceriaAprovacaoDto.IdLojaPioneer)
+                           .FirstOrDefault();
+
+            if (parceria == null)
+                return NotFound("Não foi possível encontrar a parceria entre as lojas.");
+
+            parceria.StatusAtual = "EM ANDAMENTO";
+
+            _dbPackAndPromote.Parceria.Update(parceria);
+            _dbPackAndPromote.SaveChanges();
+
+            return Ok("Parceria aprovada com sucesso!");
         }
         #endregion
 
