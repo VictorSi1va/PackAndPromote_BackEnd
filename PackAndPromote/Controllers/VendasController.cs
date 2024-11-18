@@ -65,12 +65,11 @@ namespace PackAndPromote.Controllers
                                         })
                                         .ToList();
 
-            // Filtra as lojas que NÃO possuem uma parceria onde:
-            // a loja atual (id) é a IdLojaPioneer e a loja pesquisada é a IdLojaPromoter
+            // Filtra as lojas que NÃO possuem uma parceria com a loja atual (id)
             lojas = lojas
                     .Where(loja => !_dbPackAndPromote.Parceria
-                    .Any(p => p.IdLojaPioneer == id && 
-                              p.IdLojaPromoter == loja.IdLoja))
+                    .Any(p => (p.IdLojaPioneer == id && p.IdLojaPromoter == loja.IdLoja) ||
+                              (p.IdLojaPioneer == loja.IdLoja && p.IdLojaPromoter == id)))
                     .ToList();
 
             // Atribui a imagem da loja para cada item filtrado.
@@ -100,12 +99,12 @@ namespace PackAndPromote.Controllers
                                          })
                                         .ToList();
 
-            // Filtra as lojas que possuem uma parceria com o status "EM ANDAMENTO"
+            // Filtra as lojas que possuem uma parceria com status "EM ANDAMENTO" e verifica nos dois papéis
             lojas = lojas
                     .Where(loja => _dbPackAndPromote.Parceria
-                    .Any(p => p.IdLojaPioneer == id &&
-                         p.IdLojaPromoter == loja.IdLoja &&
-                         p.StatusAtual == "EM ANDAMENTO"))
+                    .Any(p => (p.IdLojaPioneer == id && p.IdLojaPromoter == loja.IdLoja ||
+                               p.IdLojaPioneer == loja.IdLoja && p.IdLojaPromoter == id) &&
+                               p.StatusAtual == "EM ANDAMENTO"))
                     .ToList();
 
             // Atribui a imagem da loja para cada item filtrado.
