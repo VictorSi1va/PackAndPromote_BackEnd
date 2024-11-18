@@ -57,8 +57,7 @@ namespace PackAndPromote.Controllers
         public ActionResult<IEnumerable<ParceriaCardDto>> ListarNovasParcerias(int id)
         {
             var lojas = _dbPackAndPromote.Loja
-                                        .Where(xs => xs.IdLoja != id)
-                                        .Take(7)
+                                        .Where(xs => xs.IdLoja != id)                                        
                                         .Select(xs => new ParceriaCardDto
                                         {
                                             IdLoja = xs.IdLoja,
@@ -83,7 +82,7 @@ namespace PackAndPromote.Controllers
                                                     .FirstOrDefault();
             }
 
-            return Ok(lojas);
+            return Ok(lojas.Take(7));
         }
         #endregion
 
@@ -94,7 +93,6 @@ namespace PackAndPromote.Controllers
         {
             var lojas = _dbPackAndPromote.Loja
                                          .Where(xs => xs.IdLoja != id)
-                                         .Take(7)
                                          .Select(xs => new ParceriaCardDto
                                          {
                                              IdLoja = xs.IdLoja,
@@ -119,7 +117,7 @@ namespace PackAndPromote.Controllers
                                     .FirstOrDefault();
             }
 
-            return Ok(lojas);
+            return Ok(lojas.Take(7));
         }
         #endregion
 
@@ -131,7 +129,6 @@ namespace PackAndPromote.Controllers
             // Obtenha a lista de lojas com as parcerias solicitadas.
             var lojas = _dbPackAndPromote.Loja
                                         .Where(xs => xs.IdLoja != id)
-                                        .Take(7)
                                         .Select(xs => new ParceriaCardDto
                                         {
                                             IdLoja = xs.IdLoja,
@@ -156,7 +153,7 @@ namespace PackAndPromote.Controllers
                                     .FirstOrDefault();
             }
 
-            return Ok(lojas);
+            return Ok(lojas.Take(7));
         }
         #endregion
 
@@ -168,7 +165,6 @@ namespace PackAndPromote.Controllers
             // Obtenha a lista de lojas com as parcerias solicitadas.
             var lojas = _dbPackAndPromote.Loja
                                          .Where(xs => xs.IdLoja != id)
-                                         .Take(7)
                                          .Select(xs => new ParceriaCardDto
                                          {
                                              IdLoja = xs.IdLoja,
@@ -193,7 +189,7 @@ namespace PackAndPromote.Controllers
                                     .FirstOrDefault();
             }
 
-            return Ok(lojas);
+            return Ok(lojas.Take(7));
         }
         #endregion
 
