@@ -53,7 +53,7 @@ namespace PackAndPromote.Controllers
 
         #region Listar Novas Parcerias
         [Authorize]
-        [HttpGet("ListarNovasParcerias/{id}")]
+        [HttpGet("ListarNovasParcerias/{idUsuarioLogado}")]
         public ActionResult<IEnumerable<ParceriaCardDto>> ListarNovasParcerias(int idUsuarioLogado)
         {
             var id = _dbPackAndPromote.Usuario.Where(xs => xs.IdUsuario == idUsuarioLogado)
@@ -91,7 +91,7 @@ namespace PackAndPromote.Controllers
 
         #region Listar Parcerias Atuais
         [Authorize]
-        [HttpGet("ListarParceriasAtuais/{id}")]
+        [HttpGet("ListarParceriasAtuais/{idUsuarioLogado}")]
         public ActionResult<IEnumerable<ParceriaCardDto>> ListarParceriasAtuais(int idUsuarioLogado)
         {
             var id = _dbPackAndPromote.Usuario.Where(xs => xs.IdUsuario == idUsuarioLogado)
@@ -130,7 +130,7 @@ namespace PackAndPromote.Controllers
 
         #region Listar Parcerias Solicitadas
         [Authorize]
-        [HttpGet("ListarParceriasSolicitadas/{id}")]
+        [HttpGet("ListarParceriasSolicitadas/{idUsuarioLogado}")]
         public ActionResult<IEnumerable<ParceriaCardDto>> ListarParceriasSolicitadas(int idUsuarioLogado)
         {
             var id = _dbPackAndPromote.Usuario.Where(xs => xs.IdUsuario == idUsuarioLogado)
@@ -170,7 +170,7 @@ namespace PackAndPromote.Controllers
 
         #region Listar Parcerias Com Solicitações Pendentes
         [Authorize]
-        [HttpGet("ListarParceriasComSolicitacoesPendentes/{id}")]
+        [HttpGet("ListarParceriasComSolicitacoesPendentes/{idUsuarioLogado}")]
         public ActionResult<IEnumerable<ParceriaCardDto>> ListarParceriasComSolicitacoesPendentes(int idUsuarioLogado)
         {
             var id = _dbPackAndPromote.Usuario.Where(xs => xs.IdUsuario == idUsuarioLogado)
