@@ -40,8 +40,8 @@ namespace PackAndPromote.Controllers
         #endregion
 
         #region Salvar Imagem
-        [HttpPost("SalvarImagem")]
-        public async Task<IActionResult> SalvarImagem([FromBody] ImagemDto imagemDto)
+        [HttpPost("SalvarImagem/{idUsuarioLogado}")]
+        public async Task<IActionResult> SalvarImagem(int idUsuarioLogado, [FromBody] ImagemDto imagemDto)
         {
             if (imagemDto == null)
                 return BadRequest("Dados da imagem são obrigatórios.");
@@ -55,6 +55,28 @@ namespace PackAndPromote.Controllers
             if (string.IsNullOrWhiteSpace(imagemDto.NomeImagem))
                 return BadRequest("Nome da imagem é obrigatório.");
 
+            var id = _dbPackAndPromote.Usuario.Where(xs => xs.IdUsuario == idUsuarioLogado)
+                                              .Select(xs => xs.IdLoja)
+                                              .FirstOrDefault();
+
+            List<Imagem> listaImagens = new List<Imagem>();
+
+            var lojaImagensAtuais = _dbPackAndPromote.LojaImagem
+                                      .Where(xs => xs.IdLoja == id)
+                                      .ToList();
+
+            foreach (var item in lojaImagensAtuais)
+            {
+                var itemImagem = _dbPackAndPromote.Imagem
+                                .Where(xs => xs.IdImagem == item.IdImagem)
+                                .FirstOrDefault();
+
+                listaImagens.Add(itemImagem);
+            }
+
+            _dbPackAndPromote.LojaImagem.RemoveRange(lojaImagensAtuais);
+            _dbPackAndPromote.Imagem.RemoveRange(listaImagens);
+
             var novaImagem = new Imagem
             {
                 DadosImagem = imagemDto.DadosImagem,
@@ -64,6 +86,14 @@ namespace PackAndPromote.Controllers
             };
 
             _dbPackAndPromote.Imagem.Add(novaImagem);
+
+            LojaImagem novaLojaImagem = new LojaImagem
+            {
+                IdImagem = novaImagem.IdImagem,
+                IdLoja = id,
+            };
+
+            _dbPackAndPromote.LojaImagem.Add(novaLojaImagem);
             await _dbPackAndPromote.SaveChangesAsync();
 
             return Ok(novaImagem.IdImagem);
