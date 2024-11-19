@@ -54,8 +54,12 @@ namespace PackAndPromote.Controllers
         #region Listar Novas Parcerias
         [Authorize]
         [HttpGet("ListarNovasParcerias/{id}")]
-        public ActionResult<IEnumerable<ParceriaCardDto>> ListarNovasParcerias(int id)
+        public ActionResult<IEnumerable<ParceriaCardDto>> ListarNovasParcerias(int idUsuarioLogado)
         {
+            var id = _dbPackAndPromote.Usuario.Where(xs => xs.IdUsuario == idUsuarioLogado)
+                                              .Select(xs => xs.IdLoja)
+                                              .FirstOrDefault();
+
             var lojas = _dbPackAndPromote.Loja
                                         .Where(xs => xs.IdLoja != id)                                        
                                         .Select(xs => new ParceriaCardDto
@@ -88,8 +92,12 @@ namespace PackAndPromote.Controllers
         #region Listar Parcerias Atuais
         [Authorize]
         [HttpGet("ListarParceriasAtuais/{id}")]
-        public ActionResult<IEnumerable<ParceriaCardDto>> ListarParceriasAtuais(int id)
+        public ActionResult<IEnumerable<ParceriaCardDto>> ListarParceriasAtuais(int idUsuarioLogado)
         {
+            var id = _dbPackAndPromote.Usuario.Where(xs => xs.IdUsuario == idUsuarioLogado)
+                                              .Select(xs => xs.IdLoja)
+                                              .FirstOrDefault();
+
             var lojas = _dbPackAndPromote.Loja
                                          .Where(xs => xs.IdLoja != id)
                                          .Select(xs => new ParceriaCardDto
@@ -123,8 +131,12 @@ namespace PackAndPromote.Controllers
         #region Listar Parcerias Solicitadas
         [Authorize]
         [HttpGet("ListarParceriasSolicitadas/{id}")]
-        public ActionResult<IEnumerable<ParceriaCardDto>> ListarParceriasSolicitadas(int id)
+        public ActionResult<IEnumerable<ParceriaCardDto>> ListarParceriasSolicitadas(int idUsuarioLogado)
         {
+            var id = _dbPackAndPromote.Usuario.Where(xs => xs.IdUsuario == idUsuarioLogado)
+                                              .Select(xs => xs.IdLoja)
+                                              .FirstOrDefault();
+
             // Obtenha a lista de lojas com as parcerias solicitadas.
             var lojas = _dbPackAndPromote.Loja
                                         .Where(xs => xs.IdLoja != id)
@@ -159,8 +171,12 @@ namespace PackAndPromote.Controllers
         #region Listar Parcerias Com Solicitações Pendentes
         [Authorize]
         [HttpGet("ListarParceriasComSolicitacoesPendentes/{id}")]
-        public ActionResult<IEnumerable<ParceriaCardDto>> ListarParceriasComSolicitacoesPendentes(int id)
+        public ActionResult<IEnumerable<ParceriaCardDto>> ListarParceriasComSolicitacoesPendentes(int idUsuarioLogado)
         {
+            var id = _dbPackAndPromote.Usuario.Where(xs => xs.IdUsuario == idUsuarioLogado)
+                                  .Select(xs => xs.IdLoja)
+                                  .FirstOrDefault();
+
             // Obtenha a lista de lojas com as parcerias solicitadas.
             var lojas = _dbPackAndPromote.Loja
                                          .Where(xs => xs.IdLoja != id)
@@ -323,8 +339,12 @@ namespace PackAndPromote.Controllers
         #region Solicitar Parceria
         [Authorize]
         [HttpPost("SolicitarParceria/{id}")]
-        public IActionResult SolicitarParceria(int id, ParceriaSolicitacaoDto parceriaSolicitacaoDto)
+        public IActionResult SolicitarParceria(int idUsuarioLogado, ParceriaSolicitacaoDto parceriaSolicitacaoDto)
         {
+            var id = _dbPackAndPromote.Usuario.Where(xs => xs.IdUsuario == idUsuarioLogado)
+                                              .Select(xs => xs.IdLoja)
+                                              .FirstOrDefault();
+
             var exiteLojaPioneer = _dbPackAndPromote.Loja
                                    .Any(xs => xs.IdLoja == id);
 
@@ -363,8 +383,12 @@ namespace PackAndPromote.Controllers
         #region Aprovar Parceria
         [Authorize]
         [HttpPost("AprovarParceria/{id}")]
-        public IActionResult AprovarParceria(int id, ParceriaAprovacaoDto parceriaAprovacaoDto)
+        public IActionResult AprovarParceria(int idUsuarioLogado, ParceriaAprovacaoDto parceriaAprovacaoDto)
         {
+            var id = _dbPackAndPromote.Usuario.Where(xs => xs.IdUsuario == idUsuarioLogado)
+                                              .Select(xs => xs.IdLoja)
+                                              .FirstOrDefault();
+
             var parceria = _dbPackAndPromote.Parceria
                            .Where(xs => xs.IdLojaPromoter == id &&
                                   xs.IdLojaPioneer == parceriaAprovacaoDto.IdLojaPioneer)
@@ -385,8 +409,12 @@ namespace PackAndPromote.Controllers
         #region Cancelar Parceria
         [Authorize]
         [HttpDelete("CancelarParceria/{id}")]
-        public IActionResult CancelarParceria(int id, ParceriaCancelamentoDto parceriaCancelamentoDto)
+        public IActionResult CancelarParceria(int idUsuarioLogado, ParceriaCancelamentoDto parceriaCancelamentoDto)
         {
+            var id = _dbPackAndPromote.Usuario.Where(xs => xs.IdUsuario == idUsuarioLogado)
+                                              .Select(xs => xs.IdLoja)
+                                              .FirstOrDefault();
+
             var parceria = _dbPackAndPromote.Parceria
                            .Where(xs => xs.IdLojaPioneer == id &&
                                   xs.IdLojaPromoter == parceriaCancelamentoDto.IdLojaPromoter)
