@@ -67,11 +67,14 @@ namespace PackAndPromote.Controllers
 
             foreach (var item in lojaImagensAtuais)
             {
-                var itemImagem = _dbPackAndPromote.Imagem
-                                .Where(xs => xs.IdImagem == item.IdImagem)
-                                .FirstOrDefault();
+                if (item.IdImagem != 3)
+                {
+                    var itemImagem = _dbPackAndPromote.Imagem
+                                    .Where(xs => xs.IdImagem == item.IdImagem)
+                                    .FirstOrDefault();
 
-                listaImagens.Add(itemImagem);
+                    listaImagens.Add(itemImagem);
+                }
             }
 
             _dbPackAndPromote.LojaImagem.RemoveRange(lojaImagensAtuais);
