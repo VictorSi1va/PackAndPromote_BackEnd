@@ -23,5 +23,7 @@
         public int MediaDiariaEmbalagensEntreguesPlano { get; set; }
         public string PeriodoPlano { get; set; }
         public string ProximaRenovacaoPlano { get; set; }
+
+        public int IdLojaImagem { get; set; }
     }
 }
