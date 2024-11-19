@@ -249,6 +249,14 @@ namespace PackAndPromote.Controllers
             if (lojaPreferenciaAlvo == null)
                 return NotFound();
 
+            int IdLojaImagem = _dbPackAndPromote.LojaImagem
+                                                .Where(xs => xs.IdLoja == usuario.IdLoja)
+                                                .Select(xs => xs.IdImagem)
+                                                .FirstOrDefault();
+
+            if (IdLojaImagem <= 0)
+                return NotFound();
+
             UsuarioMinhaContaDto retorno = new UsuarioMinhaContaDto
             {
                 NomeLoja = loja.NomeLoja,
@@ -269,7 +277,9 @@ namespace PackAndPromote.Controllers
                 MediaMensalEmbalagensEntreguesPlano = 8750, // TODO Buscar da tabela
                 MediaDiariaEmbalagensEntreguesPlano = 25, // TODO Buscar da tabela
                 ProximaRenovacaoPlano = "19/12/2024", // TODO Buscar da tabela
-                PeriodoPlano = "Mensal" // TODO Buscar da tabela
+                PeriodoPlano = "Mensal", // TODO Buscar da tabela
+
+                IdLojaImagem = IdLojaImagem
             };
 
             return retorno;
@@ -324,7 +334,7 @@ namespace PackAndPromote.Controllers
                 return BadRequest("É necessário selecionar pelo menos uma região alvo.");
 
             // Verifica se já existe um usuário com o mesmo Login
-            if (_dbPackAndPromote.Usuario.Any(u => u.Login == novoUsuarioDto.Login))
+            if (_dbPackAndPromote.Usuario.Any(u => u.Login.ToUpper() == novoUsuarioDto.Login.ToUpper()))
                 return BadRequest("Já existe um usuário com esse login.");
 
             // Criação da loja
