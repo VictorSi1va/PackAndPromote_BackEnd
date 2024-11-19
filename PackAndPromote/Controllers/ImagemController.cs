@@ -40,6 +40,7 @@ namespace PackAndPromote.Controllers
         #endregion
 
         #region Salvar Imagem
+        [Authorize]
         [HttpPost("SalvarImagem/{idUsuarioLogado}")]
         public async Task<IActionResult> SalvarImagem(int idUsuarioLogado, [FromBody] ImagemDto imagemDto)
         {
