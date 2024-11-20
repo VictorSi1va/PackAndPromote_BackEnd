@@ -338,7 +338,7 @@ namespace PackAndPromote.Controllers
 
         #region Solicitar Parceria
         [Authorize]
-        [HttpPost("SolicitarParceria/{id}")]
+        [HttpPost("SolicitarParceria/{idUsuarioLogado}")]
         public IActionResult SolicitarParceria(int idUsuarioLogado, ParceriaSolicitacaoDto parceriaSolicitacaoDto)
         {
             var id = _dbPackAndPromote.Usuario.Where(xs => xs.IdUsuario == idUsuarioLogado)
@@ -382,7 +382,7 @@ namespace PackAndPromote.Controllers
 
         #region Aprovar Parceria
         [Authorize]
-        [HttpPost("AprovarParceria/{id}")]
+        [HttpPost("AprovarParceria/{idUsuarioLogado}")]
         public IActionResult AprovarParceria(int idUsuarioLogado, ParceriaAprovacaoDto parceriaAprovacaoDto)
         {
             var id = _dbPackAndPromote.Usuario.Where(xs => xs.IdUsuario == idUsuarioLogado)
@@ -408,7 +408,7 @@ namespace PackAndPromote.Controllers
 
         #region Cancelar Parceria
         [Authorize]
-        [HttpDelete("CancelarParceria/{id}")]
+        [HttpDelete("CancelarParceria/{idUsuarioLogado}")]
         public IActionResult CancelarParceria(int idUsuarioLogado, ParceriaCancelamentoDto parceriaCancelamentoDto)
         {
             var id = _dbPackAndPromote.Usuario.Where(xs => xs.IdUsuario == idUsuarioLogado)

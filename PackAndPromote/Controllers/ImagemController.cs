@@ -44,62 +44,79 @@ namespace PackAndPromote.Controllers
         [HttpPost("SalvarImagem/{idUsuarioLogado}")]
         public async Task<IActionResult> SalvarImagem(int idUsuarioLogado, [FromBody] ImagemDto imagemDto)
         {
-            if (imagemDto == null)
-                return BadRequest("Dados da imagem são obrigatórios.");
-
-            if (imagemDto.DadosImagem == null || imagemDto.DadosImagem.Length == 0)
+            // Validação inicial
+            if (imagemDto == null || imagemDto.DadosImagem == null || imagemDto.DadosImagem.Length == 0)
                 return BadRequest("Conteúdo da imagem é obrigatório.");
 
             if (string.IsNullOrWhiteSpace(imagemDto.TipoExtensao))
-                return BadRequest("Extensão da imagem é obrigatório.");
+                return BadRequest("Extensão da imagem é obrigatória.");
 
             if (string.IsNullOrWhiteSpace(imagemDto.NomeImagem))
                 return BadRequest("Nome da imagem é obrigatório.");
 
-            var id = _dbPackAndPromote.Usuario.Where(xs => xs.IdUsuario == idUsuarioLogado)
-                                              .Select(xs => xs.IdLoja)
-                                              .FirstOrDefault();
+            // Obtendo o IdLoja do usuário logado
+            var idLoja = _dbPackAndPromote.Usuario
+                                .Where(u => u.IdUsuario == idUsuarioLogado)
+                                .Select(u => u.IdLoja)
+                                .FirstOrDefault();
 
-            List<Imagem> listaImagens = new List<Imagem>();
+            // Verifica se a loja foi encontrada
+            if (idLoja == 0)
+                return NotFound("Loja não encontrada para o usuário.");
 
+            // Remover os relacionamentos LojaImagem, exceto para o IdImagem == 3
             var lojaImagensAtuais = _dbPackAndPromote.LojaImagem
-                                      .Where(xs => xs.IdLoja == id)
-                                      .ToList();
+                                              .Where(li => li.IdLoja == idLoja && li.IdImagem != 3)
+                                              .ToList();
 
-            foreach (var item in lojaImagensAtuais)
+            // Remover os relacionamentos LojaImagem (exceto o que tem IdImagem == 3)
+            if (lojaImagensAtuais.Any())
             {
-                if (item.IdImagem != 3)
-                {
-                    var itemImagem = _dbPackAndPromote.Imagem
-                                    .Where(xs => xs.IdImagem == item.IdImagem)
-                                    .FirstOrDefault();
-
-                    listaImagens.Add(itemImagem);
-                }
+                _dbPackAndPromote.LojaImagem.RemoveRange(lojaImagensAtuais);
             }
 
-            _dbPackAndPromote.LojaImagem.RemoveRange(lojaImagensAtuais);
-            _dbPackAndPromote.Imagem.RemoveRange(listaImagens);
+            // Remover as imagens associadas à loja, exceto a imagem com IdImagem == 3
+            var imagensRemover = _dbPackAndPromote.Imagem
+                                                  .Where(i => lojaImagensAtuais
+                                                  .Select(li => li.IdImagem).Contains(i.IdImagem))
+                                                  .ToList();
 
+            if (imagensRemover.Any())
+            {
+                _dbPackAndPromote.Imagem.RemoveRange(imagensRemover);
+            }
+
+            // Criar e adicionar a nova imagem
             var novaImagem = new Imagem
             {
                 DadosImagem = imagemDto.DadosImagem,
                 TipoExtensao = imagemDto.TipoExtensao,
                 NomeImagem = imagemDto.NomeImagem,
-                DataCriacao = DateTime.Now,
+                DataCriacao = DateTime.Now
             };
 
             _dbPackAndPromote.Imagem.Add(novaImagem);
 
-            LojaImagem novaLojaImagem = new LojaImagem
+            // Adicionar relacionamento LojaImagem
+            var novaLojaImagem = new LojaImagem
             {
                 IdImagem = novaImagem.IdImagem,
-                IdLoja = id,
+                IdLoja = idLoja
             };
 
             _dbPackAndPromote.LojaImagem.Add(novaLojaImagem);
-            await _dbPackAndPromote.SaveChangesAsync();
 
+            // Remover o relacionamento LojaImagem da imagem com IdImagem == 3
+            var lojaImagemComId3 = _dbPackAndPromote.LojaImagem
+                                                    .FirstOrDefault(li => li.IdLoja == idLoja &&
+                                                                          li.IdImagem == 3);
+
+            if (lojaImagemComId3 != null)
+            {
+                _dbPackAndPromote.LojaImagem.Remove(lojaImagemComId3);
+            }
+
+            await _dbPackAndPromote.SaveChangesAsync();
             return Ok(novaImagem.IdImagem);
         }
         #endregion
