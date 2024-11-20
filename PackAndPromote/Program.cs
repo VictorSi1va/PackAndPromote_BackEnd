@@ -59,18 +59,24 @@ builder.Services.AddDbContext<DbPackAndPromote>(options =>
 // Configuração do CORS (Cross-Origin Resource Sharing) para permitir requisições de qualquer origem
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
+    options.AddPolicy("AllowSpecificOrigins",
+    policy =>
     {
-        policy.AllowAnyOrigin()   // Permite requisições de qualquer origem
-              .AllowAnyMethod()   // Permite qualquer método HTTP (GET, POST, etc.)
-              .AllowAnyHeader();  // Permite qualquer cabeçalho
+        policy.WithOrigins("http://localhost:3000",
+                           "http://localhost:5288",
+                           "https://pack-and-promote.vercel.app",
+                           "https://pack-and-promote.azurewebsites.net",
+                           "https://pack-and-promote-dev.azurewebsites.net/")
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowCredentials();
     });
 });
 
 var app = builder.Build();
 
 // Ativando o CORS usando a política definida anteriormente
-app.UseCors("AllowAll");
+app.UseCors("AllowSpecificOrigins");
 
 // Configura o pipeline de requisições HTTP
 app.UseSwagger(); // Habilita a geração da documentação Swagger
