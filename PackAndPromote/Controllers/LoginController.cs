@@ -534,6 +534,49 @@ namespace PackAndPromote.Controllers
         [HttpPut("AlterarUsuario/{id}")]
         public IActionResult AlterarUsuario(int id, UsuarioAlteradoDto usuarioAlteradoDto)
         {
+            // Validação dos dados de entrada
+            if (usuarioAlteradoDto == null)
+                return BadRequest("Os dados do usuário não podem ser nulos.");
+
+            // Validações de campos obrigatórios
+            if (string.IsNullOrEmpty(usuarioAlteradoDto.NomeLoja))
+                return BadRequest("O nome da loja é obrigatório.");
+
+            if (string.IsNullOrEmpty(usuarioAlteradoDto.EnderecoLoja))
+                return BadRequest("O endereço da loja é obrigatório.");
+
+            if (string.IsNullOrEmpty(usuarioAlteradoDto.TelefoneLoja))
+                return BadRequest("O telefone da loja é obrigatório.");
+
+            if (string.IsNullOrEmpty(usuarioAlteradoDto.CNPJLoja))
+                return BadRequest("O CNPJ da loja é obrigatório.");
+
+            // Validação de formato do CNPJ (apenas um exemplo simples)
+            if (!IsValidCNPJ(usuarioAlteradoDto.CNPJLoja))
+                return BadRequest("O CNPJ da loja é inválido.");
+
+            if (string.IsNullOrEmpty(usuarioAlteradoDto.EmailLoja) || !IsValidEmail(usuarioAlteradoDto.EmailLoja))
+                return BadRequest("O email da loja é inválido.");
+
+            if (usuarioAlteradoDto.IdCategoria == 0)
+                return BadRequest("A categoria da loja deve ser informada.");
+
+            if (usuarioAlteradoDto.IdPlano == 0)
+                return BadRequest("O plano da loja deve ser informado.");
+
+            // Validação de listas: FaixaEtaria, PreferenciaAlvo, PublicoAlvo, RegiaoAlvo
+            if (usuarioAlteradoDto.FaixaEtaria == null || !usuarioAlteradoDto.FaixaEtaria.Any())
+                return BadRequest("É necessário selecionar pelo menos uma faixa etária.");
+
+            if (usuarioAlteradoDto.PreferenciaAlvo == null || !usuarioAlteradoDto.PreferenciaAlvo.Any())
+                return BadRequest("É necessário selecionar pelo menos uma preferencia alvo.");
+
+            if (usuarioAlteradoDto.PublicoAlvo == null || !usuarioAlteradoDto.PublicoAlvo.Any())
+                return BadRequest("É necessário selecionar pelo menos um público alvo.");
+
+            if (usuarioAlteradoDto.RegiaoAlvo == null || !usuarioAlteradoDto.RegiaoAlvo.Any())
+                return BadRequest("É necessário selecionar pelo menos uma região alvo.");
+
             // Busca o usuário pelo ID fornecido
             var usuario = _dbPackAndPromote.Usuario.Find(id);
 
@@ -565,7 +608,130 @@ namespace PackAndPromote.Controllers
                 //loja.IdPreferenciaAlvo = usuarioAlteradoDto.IdPreferenciaAlvo;
             }
 
-            // Salva as alterações no banco de dados
+            var lojaCategoriaAtual = _dbPackAndPromote.LojaCategoria
+                                     .Where(xs => xs.IdLoja == loja.IdLoja)
+                                     .FirstOrDefault();
+
+            if (lojaCategoriaAtual != null &&
+                lojaCategoriaAtual.IdCategoria != usuarioAlteradoDto.IdCategoria)
+            {
+                lojaCategoriaAtual.IdCategoria = usuarioAlteradoDto.IdCategoria;
+            }
+
+            var lojaPlanoAtual = _dbPackAndPromote.LojaPlano
+                                .Where(xs => xs.IdLoja == loja.IdLoja)
+                                .FirstOrDefault();
+
+            if (lojaPlanoAtual != null &&
+                lojaPlanoAtual.IdPlano != usuarioAlteradoDto.IdPlano)
+            {
+                lojaPlanoAtual.IdPlano = usuarioAlteradoDto.IdPlano;
+            }
+
+            // Verificar e atualizar FaixaEtaria
+            var lojaFaixasAtuais = _dbPackAndPromote.LojaFaixaEtaria
+                                                    .Where(lfe => lfe.IdLoja == loja.IdLoja)
+                                                    .ToList();
+
+            // Remover faixas etárias que não foram selecionadas
+            var faixasParaRemover = lojaFaixasAtuais
+                .Where(lfe => !usuarioAlteradoDto.FaixaEtaria.Contains(lfe.IdFaixaEtaria))
+                .ToList();
+
+            _dbPackAndPromote.LojaFaixaEtaria.RemoveRange(faixasParaRemover);
+
+            // Adicionar faixas etárias novas
+            foreach (var faixaEtaria in usuarioAlteradoDto.FaixaEtaria)
+            {
+                if (!lojaFaixasAtuais.Any(lfe => lfe.IdFaixaEtaria == faixaEtaria))
+                {
+                    var lojaFaixaEtaria = new LojaFaixaEtaria
+                    {
+                        IdLoja = loja.IdLoja,
+                        IdFaixaEtaria = faixaEtaria
+                    };
+                    _dbPackAndPromote.LojaFaixaEtaria.Add(lojaFaixaEtaria);
+                }
+            }
+
+            // Verificar e atualizar PreferenciaAlvo
+            var lojaPreferenciasAtuais = _dbPackAndPromote.LojaPreferenciaAlvo
+                                                         .Where(lpa => lpa.IdLoja == loja.IdLoja)
+                                                         .ToList();
+
+            // Remover preferências que não foram selecionadas
+            var preferenciasParaRemover = lojaPreferenciasAtuais
+                .Where(lpa => !usuarioAlteradoDto.PreferenciaAlvo.Contains(lpa.IdPreferenciaAlvo))
+                .ToList();
+
+            _dbPackAndPromote.LojaPreferenciaAlvo.RemoveRange(preferenciasParaRemover);
+
+            // Adicionar preferências novas
+            foreach (var preferenciaAlvo in usuarioAlteradoDto.PreferenciaAlvo)
+            {
+                if (!lojaPreferenciasAtuais.Any(lpa => lpa.IdPreferenciaAlvo == preferenciaAlvo))
+                {
+                    var lojaPreferenciaAlvo = new LojaPreferenciaAlvo
+                    {
+                        IdLoja = loja.IdLoja,
+                        IdPreferenciaAlvo = preferenciaAlvo
+                    };
+                    _dbPackAndPromote.LojaPreferenciaAlvo.Add(lojaPreferenciaAlvo);
+                }
+            }
+
+            // Verificar e atualizar PublicoAlvo
+            var lojaPublicosAtuais = _dbPackAndPromote.LojaPublicoAlvo
+                                                    .Where(lpa => lpa.IdLoja == loja.IdLoja)
+                                                    .ToList();
+
+            // Remover públicos que não foram selecionados
+            var publicosParaRemover = lojaPublicosAtuais
+                .Where(lpa => !usuarioAlteradoDto.PublicoAlvo.Contains(lpa.IdPublicoAlvo))
+                .ToList();
+
+            _dbPackAndPromote.LojaPublicoAlvo.RemoveRange(publicosParaRemover);
+
+            // Adicionar públicos novos
+            foreach (var publicoAlvo in usuarioAlteradoDto.PublicoAlvo)
+            {
+                if (!lojaPublicosAtuais.Any(lpa => lpa.IdPublicoAlvo == publicoAlvo))
+                {
+                    var lojaPublicoAlvo = new LojaPublicoAlvo
+                    {
+                        IdLoja = loja.IdLoja,
+                        IdPublicoAlvo = publicoAlvo
+                    };
+                    _dbPackAndPromote.LojaPublicoAlvo.Add(lojaPublicoAlvo);
+                }
+            }
+
+            // Verificar e atualizar RegiaoAlvo
+            var lojaRegioesAtuais = _dbPackAndPromote.LojaRegiaoAlvo
+                                                     .Where(lra => lra.IdLoja == loja.IdLoja)
+                                                     .ToList();
+
+            // Remover regiões que não foram selecionadas
+            var regioesParaRemover = lojaRegioesAtuais
+                .Where(lra => !usuarioAlteradoDto.RegiaoAlvo.Contains(lra.IdRegiaoAlvo))
+                .ToList();
+
+            _dbPackAndPromote.LojaRegiaoAlvo.RemoveRange(regioesParaRemover);
+
+            // Adicionar regiões novas
+            foreach (var regiaoAlvo in usuarioAlteradoDto.RegiaoAlvo)
+            {
+                if (!lojaRegioesAtuais.Any(lra => lra.IdRegiaoAlvo == regiaoAlvo))
+                {
+                    var lojaRegiaoAlvo = new LojaRegiaoAlvo
+                    {
+                        IdLoja = loja.IdLoja,
+                        IdRegiaoAlvo = regiaoAlvo
+                    };
+                    _dbPackAndPromote.LojaRegiaoAlvo.Add(lojaRegiaoAlvo);
+                }
+            }
+
             _dbPackAndPromote.SaveChanges();
 
             // Retorna um status 200 OK com uma mensagem de sucesso
