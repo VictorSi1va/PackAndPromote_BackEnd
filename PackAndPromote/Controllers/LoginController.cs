@@ -598,14 +598,6 @@ namespace PackAndPromote.Controllers
                 loja.TelefoneLoja = usuarioAlteradoDto.TelefoneLoja;
                 loja.CNPJLoja = usuarioAlteradoDto.CNPJLoja;
                 loja.EmailLoja = usuarioAlteradoDto.EmailLoja;
-
-                // Atualizar as informações adicionais da loja
-                //loja.IdCategoria = usuarioAlteradoDto.IdCategoria;
-                //loja.IdCategoria = usuarioAlteradoDto.IdPlano;
-                //loja.IdPublicoAlvo = usuarioAlteradoDto.IdPublicoAlvo;
-                //loja.IdFaixaEtaria = usuarioAlteradoDto.IdFaixaEtaria;
-                //loja.IdRegiaoAlvo = usuarioAlteradoDto.IdRegiaoAlvo;
-                //loja.IdPreferenciaAlvo = usuarioAlteradoDto.IdPreferenciaAlvo;
             }
 
             var lojaCategoriaAtual = _dbPackAndPromote.LojaCategoria
